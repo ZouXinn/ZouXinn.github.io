@@ -6,7 +6,7 @@ subtitle: I am a second-year PhD student at the School of Computer Science, <a h
 
 profile:
   align: right
-  image: # prof_pic.jpg
+  image: me.jpg
   image_circular: false # crops the image to make it circular
   address: #>
     # <p>zouxin2021[at]gmail[dot]com</p>
