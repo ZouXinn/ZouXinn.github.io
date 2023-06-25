@@ -11,7 +11,7 @@
   contents:
     - title: Ph.D. in Computer Science
       institution: School of Computer Science, Wuhan University
-      year: 2021-Now
+      year: 2021-Present
       description:
         - Advised by Weiwei Liu
     - title: Bachelor in Software Engineering
@@ -73,16 +73,14 @@
   contents:
     - title: Statistics Learning Theory.
       items: 
-        - Description 1.
-        - Description 2.
+        - PAC Learning.
     - title: Generalization Theory.
       items:
-        - Description 1.
-        - Description 2.
+        - Uniform Convergence.
+        - Stability.
     - title: Deep Learning Theory.
       items:
-        - Description 1.
-        - Description 2.
+        - Feature Learning.
     - title: Trustworthy Machine Learning.
       items:
         - Adversarial Learning.
