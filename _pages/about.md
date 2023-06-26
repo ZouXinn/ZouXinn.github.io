@@ -2,7 +2,7 @@
 layout: about
 title: about
 permalink: /
-subtitle: I am a second-year PhD student at the School of Computer Science, <a href='https://en.whu.edu.cn/'>Wuhan University</a>.
+subtitle: I am Xin Zou (邹鑫), a second-year PhD student at the School of Computer Science, <a href='https://en.whu.edu.cn/'>Wuhan University</a>.
 
 profile:
   align: right
