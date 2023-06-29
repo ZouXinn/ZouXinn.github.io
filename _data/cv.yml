@@ -78,8 +78,6 @@
       items:
         - Uniform Convergence.
         - Stability.
-    - title: Deep Learning Theory.
-      items:
         - Feature Learning.
     - title: Trustworthy Machine Learning.
       items:
