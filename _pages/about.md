@@ -1,6 +1,6 @@
 ---
 layout: about
-title: about
+title: About
 permalink: /
 subtitle: I am Xin Zou (邹鑫), a second-year PhD student at the School of Computer Science, <a href='https://en.whu.edu.cn/'>Wuhan University</a>.
 

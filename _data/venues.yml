@@ -8,6 +8,8 @@
 
 "JMLR":
   url: https://www.jmlr.org/
+  color: "#5313f2"
 
 "NeurIPS":
   url: https://nips.cc/
+  color: "#f25313"
