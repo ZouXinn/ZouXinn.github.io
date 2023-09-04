@@ -56,7 +56,7 @@
 - title: Professional Services
   type: nested_list
   contents:
-    - title: Conference Reviewers
+    - title: Conference Reviewer
       items:
       - ICML (2023)
       - NeurIPS (2023)
