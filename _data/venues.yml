@@ -1,9 +1,9 @@
-"AJP":
-  url: https://aapt.scitation.org/journal/ajp
-  color: "#00369f"
+# "AJP":
+#   url: https://aapt.scitation.org/journal/ajp
+#   color: "#00369f"
 
-"PhysRev":
-  url: https://journals.aps.org/
+# "PhysRev":
+#   url: https://journals.aps.org/
 
 
 "JMLR":
@@ -15,4 +15,4 @@
   color: "#f25313"
 
 "AAAI": https://aaai.org/
-  color: "#b509ac"
+  color: "#00369f"
