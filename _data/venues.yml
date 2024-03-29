@@ -1,11 +1,3 @@
-# "AJP":
-#   url: https://aapt.scitation.org/journal/ajp
-#   color: "#00369f"
-
-# "PhysRev":
-#   url: https://journals.aps.org/
-
-
 "JMLR":
   url: https://www.jmlr.org/
   color: "#5313f2"
@@ -14,5 +6,6 @@
   url: https://nips.cc/
   color: "#f25313"
 
-"AAAI": https://aaai.org/
+"AAAI":
+  url: https://aaai.org/
   color: "#00369f"
