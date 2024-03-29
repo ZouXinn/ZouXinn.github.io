@@ -13,3 +13,6 @@
 "NeurIPS":
   url: https://nips.cc/
   color: "#f25313"
+
+"AAAI": https://aaai.org/
+  color: "#b509ac"
