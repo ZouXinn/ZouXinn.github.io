@@ -3,6 +3,35 @@
 
 @string{aps = {American Physical Society,}}
 
+@inproceedings{anonymous2024a,
+  abbr={ICML},
+  title={A Provable Decision Rule for Out-of-Distribution Detection},
+  author={Xinsong Ma and Xin Zou and Weiwei Liu},
+  booktitle={ICML},
+  year={2024},
+  abstract={
+    Out-of-distribution (OOD) detection task plays the key role in reliable and safety-critical applications. Existing researches mainly devote to designing or training the powerful score function but overlook investigating the decision rule based on the proposed score function. Different from previous work, this paper aims to design a decision rule with rigorous theoretical guarantee and well empirical performance. Specifically, we provide a new insight for the OOD detection task from a hypothesis testing perspective and propose a novel generalized Benjamini Hochberg (g-BH) procedure to solve the testing problem. Theoretically, the g-BH procedure controls false discovery rate (FDR) at pre-specified level. Furthermore, we derive an upper bound of the expectation of false positive rate (FPR) for the g-BH procedure based on the tailed generalized Gaussian distribution family, indicating that the FPR of g-BH procedure converges to zero in probability. Finally, the extensive experimental results verify the superiority of g-BH procedure over the traditional threshold-based decision rule on several OOD detection benchmarks. Particularly, combining SHE with the g-BH procedure, the FPR95 is reduced by 13.65% on average compared with the vanilla SHE.},
+    selected={true},
+}
+
+@inproceedings{ZouLiu2024,
+  abbr    = {AAAI},
+  title   = {Coverage-Guaranteed Prediction Sets for Out-of-Distribution Data},
+  author={Xin Zou and Weiwei Liu},
+  booktitle = {AAAI},
+  year={2024},
+  url     = {https://ojs.aaai.org/index.php/AAAI/article/view/29673},
+  doi={10.1609/aaai.v38i15.29673},
+  abstract  = {Out-of-distribution (OOD) generalization has attracted increasing research attention in recent years, due to its promising experimental results in real-world applications. In this paper, we study the confidence set prediction problem in the OOD generalization setting. Split conformal prediction (SCP) is an efficient framework for handling the confidence set prediction problem. However, the validity of SCP requires the examples to be exchangeable, which is violated in the OOD setting. Empirically, we show that trivially applying SCP results in a failure to maintain the marginal coverage when the unseen target domain is different from the source domain. To address this issue, we develop a method for forming confident prediction sets in the OOD setting and theoretically prove the validity of our method. Finally, we conduct experiments on simulated data to empirically verify the correctness of our theory and the validity of our proposed method.},
+  html={https://ojs.aaai.org/index.php/AAAI/article/view/29673},
+  number={15},
+  volume={38}, 
+  pages={17263-17270},
+  bibtex_show={false},
+  selected={true},
+  dimensions={true},
+}
+
 @inproceedings{DBLP:conf/nips/ZouL23,
   abbr={NeurIPS},
   author = {Xin Zou and Weiwei Liu},
@@ -39,7 +68,7 @@
   selected={true},
   pdf={https://www.jmlr.org/papers/volume24/22-0866/22-0866.pdf},
   html={https://www.jmlr.org/papers/v24/22-0866.html},
-  bibtex_show={true}
+  bibtex_show={false}
 }
 
 @inproceedings{DBLP:conf/nips/LiXL22,
@@ -56,23 +85,6 @@
   abstract={Although deep neural networks (DNN) have achieved great success, their applications in safety-critical areas are hindered due to their vulnerability to adversarial attacks. Some recent works have accordingly proposed to enhance the robustness of DNN from a dynamic system perspective. Following this line of inquiry, and inspired by the asymptotic stability of the general nonautonomous dynamical system, we propose to make each clean instance be the asymptotically stable equilibrium points of a slowly time-varying system in order to defend against adversarial attacks. We present a theoretical guarantee that if a clean instance is an asymptotically stable equilibrium point and the adversarial instance is in the neighborhood of this point, the asymptotic stability will reduce the adversarial noise to bring the adversarial instance close to the clean instance. Motivated by our theoretical results, we go on to propose a nonautonomous neural ordinary differential equation (ASODE) and place constraints on its corresponding linear time-variant system to make all clean instances act as its asymptotically stable equilibrium points. Our analysis suggests that the constraints can be converted to regularizers in implementation. The experimental results show that ASODE improves robustness against adversarial attacks and outperforms state-of-the-art methods.},
   pdf={https://proceedings.neurips.cc/paper_files/paper/2022/file/299a08ee712d4752c890938da99a77c6-Paper-Conference.pdf},
   html={https://proceedings.neurips.cc/paper_files/paper/2022/hash/299a08ee712d4752c890938da99a77c6-Abstract-Conference.html},
-  bibtex_show={true},
-}
-
-@inproceedings{ZouLiu2024,
-  abbr    = {AAAI},
-  title   = {Coverage-Guaranteed Prediction Sets for Out-of-Distribution Data},
-  author={Xin Zou and Weiwei Liu},
-  booktitle = {AAAI},
-  year={2024},
-  url     = {https://ojs.aaai.org/index.php/AAAI/article/view/29673},
-  doi={10.1609/aaai.v38i15.29673},
-  abstract  = {Out-of-distribution (OOD) generalization has attracted increasing research attention in recent years, due to its promising experimental results in real-world applications. In this paper, we study the confidence set prediction problem in the OOD generalization setting. Split conformal prediction (SCP) is an efficient framework for handling the confidence set prediction problem. However, the validity of SCP requires the examples to be exchangeable, which is violated in the OOD setting. Empirically, we show that trivially applying SCP results in a failure to maintain the marginal coverage when the unseen target domain is different from the source domain. To address this issue, we develop a method for forming confident prediction sets in the OOD setting and theoretically prove the validity of our method. Finally, we conduct experiments on simulated data to empirically verify the correctness of our theory and the validity of our proposed method.},
-  html={https://ojs.aaai.org/index.php/AAAI/article/view/29673},
-  number={15},
-  volume={38}, 
-  pages={17263-17270},
-  bibtex_show={true},
+  bibtex_show={false},
   selected={true},
-  dimensions={true},
 }

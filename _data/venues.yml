@@ -9,3 +9,7 @@
 "AAAI":
   url: https://aaai.org/
   color: "#00369f"
+
+"ICML":
+  url: https://icml.cc/
+  color: "#00bfff"

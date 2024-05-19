@@ -19,7 +19,7 @@ selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 ---
 
-**Research Interests:** Mahcine Learning; Generalization Theory; Adversarial robustness; Out-of-distribution generalization; Contrastive Learning
+**Research Interests:** Statistical Learning Theory; Deep Learning Theory; Representation Learning; Trustworthy ML.
 
 **Education:** I am a third-year PhD student at the School of Computer Science, Wuhan University. Before that, I obtained my Bachelor’s degree in School of Computer Science from Wuhan University.
 
