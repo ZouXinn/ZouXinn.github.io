@@ -1,6 +1,6 @@
 "JMLR":
   url: https://www.jmlr.org/
-  color: "#5313f2"
+  color: "#00bfff"
 
 "NeurIPS":
   url: https://nips.cc/
@@ -8,8 +8,8 @@
 
 "AAAI":
   url: https://aaai.org/
-  color: "#00369f"
+  color: "#f25313"
 
 "ICML":
   url: https://icml.cc/
-  color: "#00bfff"
+  color: "#f25313"
