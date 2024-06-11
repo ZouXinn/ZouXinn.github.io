@@ -3,3 +3,5 @@ To change basic informations: Inter the file "_pages/about.md" and then change i
 To change the publications: Inter the file "_bibliography/papers.bib" and then change it.
 
 To change the cv: Inter the file "_data/cv.yml" and then change it. For cv pdf, change the file "assets/pdf/CV.pdf"
+
+To change colors of or add conferences/journals, Inter the file "_data/venues.yml"
