@@ -3,6 +3,21 @@
 
 @string{aps = {American Physical Society,}}
 
+@article{LI2024111008,
+  abbr={PR},
+  title = {Residual network with self-adaptive time step size},
+  journal = {Pattern Recognition},
+  pages = {111008},
+  year = {2024},
+  issn = {0031-3203},
+  doi = {https://doi.org/10.1016/j.patcog.2024.111008},
+  url = {https://www.sciencedirect.com/science/article/pii/S0031320324007593},
+  author = {Xiyuan Li and Xin Zou and Weiwei Liu},
+  abstract = {Residual Networks (ResNet) are pivotal in machine learning. The connection between ResNets and ordinary differential equations (ODEs) has inspired enhancements of ResNets using sophisticated numerical methods for ODE systems. Recent advancements in numerical self-adaptive schemes, which adjust time step sizes based on the feature maps or parameters of residual blocks, have demonstrated promising results in enhancing ResNet performance, surpassing those achieved with fixed time step methods. However, these self-adaptive time step constructions lack theoretical support and can limit performance improvements since the self-adaptive time steps should theoretically depend on both the feature maps and the parameters of the residual blocks. In this study, we conduct a rigorous theoretical analysis of the residual functions associated with fixed or self-adaptive time step methods to demonstrate the advantages and rational designs of the self-adaptive approach. Subsequently, we introduce a novel self-adaptive ResNet, AdaTS-ResNet, which effectively incorporates both feature maps and parameters in its time step adjustments. Experimental results on the ImageNet and CIFAR datasets reveal that AdaTS-ResNet surpasses TSCLSTM-ResNet (Yang et al., 2020) in prediction accuracy and computational efficiency, where TSCLSTM represents the latest advancements of the methods designed based on the self-adaptive scheme of ODE. Our findings highlight the potential of improving ResNet architectures through adaptive techniques of dynamical systems, offering insights for future enhancements in deep learning models.},
+  selected={true},
+  html={https://www.sciencedirect.com/science/article/pii/S0031320324007593}
+}
+
 @inproceedings{anonymous2024a,
   abbr={ICML},
   title={A Provable Decision Rule for Out-of-Distribution Detection},
@@ -27,7 +42,6 @@
   number={15},
   volume={38}, 
   pages={17263-17270},
-  bibtex_show={false},
   selected={true},
   dimensions={true},
 }
@@ -68,7 +82,6 @@
   selected={true},
   pdf={https://www.jmlr.org/papers/volume24/22-0866/22-0866.pdf},
   html={https://www.jmlr.org/papers/v24/22-0866.html},
-  bibtex_show={false}
 }
 
 @inproceedings{DBLP:conf/nips/LiXL22,
@@ -81,10 +94,8 @@
   year         = {2022},
   url          = {http://papers.nips.cc/paper\_files/paper/2022/hash/299a08ee712d4752c890938da99a77c6-Abstract-Conference.html},
   timestamp    = {Thu, 11 May 2023 17:08:21 +0200},
-  biburl       = {https://dblp.org/rec/conf/nips/LiXL22.bib},
   abstract={Although deep neural networks (DNN) have achieved great success, their applications in safety-critical areas are hindered due to their vulnerability to adversarial attacks. Some recent works have accordingly proposed to enhance the robustness of DNN from a dynamic system perspective. Following this line of inquiry, and inspired by the asymptotic stability of the general nonautonomous dynamical system, we propose to make each clean instance be the asymptotically stable equilibrium points of a slowly time-varying system in order to defend against adversarial attacks. We present a theoretical guarantee that if a clean instance is an asymptotically stable equilibrium point and the adversarial instance is in the neighborhood of this point, the asymptotic stability will reduce the adversarial noise to bring the adversarial instance close to the clean instance. Motivated by our theoretical results, we go on to propose a nonautonomous neural ordinary differential equation (ASODE) and place constraints on its corresponding linear time-variant system to make all clean instances act as its asymptotically stable equilibrium points. Our analysis suggests that the constraints can be converted to regularizers in implementation. The experimental results show that ASODE improves robustness against adversarial attacks and outperforms state-of-the-art methods.},
   pdf={https://proceedings.neurips.cc/paper_files/paper/2022/file/299a08ee712d4752c890938da99a77c6-Paper-Conference.pdf},
   html={https://proceedings.neurips.cc/paper_files/paper/2022/hash/299a08ee712d4752c890938da99a77c6-Abstract-Conference.html},
-  bibtex_show={false},
   selected={true},
 }

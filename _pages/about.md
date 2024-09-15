@@ -2,7 +2,7 @@
 layout: about
 title: About
 permalink: /
-subtitle: I am Xin Zou (邹鑫), a third-year PhD student at the School of Computer Science, <a href='https://en.whu.edu.cn/'>Wuhan University</a>.
+subtitle: I am Xin Zou (邹鑫), a fourth-year PhD student at the School of Computer Science, <a href='https://en.whu.edu.cn/'>Wuhan University</a>.
 
 profile:
   align: right
@@ -19,9 +19,9 @@ selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 ---
 
-**Research Interests:** Statistical Learning Theory; Deep Learning Theory; Representation Learning; Trustworthy ML.
+**Research Interests:** Statistical Learning Theory; Deep Learning Theory; Representation Learning; Trustworthy Machine Learning.
 
-**Education:** I am a third-year PhD student at the School of Computer Science, Wuhan University. Before that, I obtained my Bachelor’s degree in School of Computer Science from Wuhan University.
+**Education:** I am a fourth-year PhD student at the School of Computer Science, Wuhan University. Before that, I obtained my Bachelor’s degree in School of Computer Science from Wuhan University.
 
 <!-- Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
 
