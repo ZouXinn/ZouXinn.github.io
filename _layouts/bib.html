@@ -58,9 +58,6 @@
               {%- endif -%}
             {%- endfor -%}
           {%- endif -%}
-
-
-
           <!-- add equal author -->
           {%- assign author_is_eq = false -%}
           {%- assign author_name = author.first | append: " " | append: author.last | strip -%}
@@ -79,9 +76,6 @@
             {%- assign add_str = "" -%}
           {%- endif -%}
           <!-- add equal author end -->
-
-          <!-- B {{add_str}} E -->
-
           {%- if forloop.length > 1 -%}
             {%- if forloop.first == false -%},&nbsp;{%- endif -%}
             {%- if forloop.last and author_array_limit == author_array_size -%}and&nbsp;{%- endif -%}
