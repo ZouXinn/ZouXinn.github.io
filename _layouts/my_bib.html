@@ -40,9 +40,19 @@
         {%- if site.max_author_limit and author_array_size > site.max_author_limit %}
           {% assign author_array_limit = site.max_author_limit %}
         {% endif %}
-      
+
+        {%- if entry.eqnumber -%}
+          {% assign eqnumber = entry.eqnumber | plus: 0 %}
+          {% assign star_amount = 0 %}
+        {%- endif -%}
+
+        <!-- {%- if entry.eqauthors -%}
+          {% assign eqauthors = entry.eqauthors | split: ',' %}
+        {%- endif -%} -->
+
         {%- for author in entry.author_array limit: author_array_limit -%}
           {%- assign author_is_self = false -%}
+          {%- assign author_is_eq = false -%}
           {%- assign author_last_name = author.last | remove: "¶" | remove: "&" | remove: "*" | remove: "†" | remove: "^" -%}
           {%- if site.scholar.last_name contains author_last_name -%}
             {%- if site.scholar.first_name contains author.first -%}
@@ -59,43 +69,49 @@
             {%- endfor -%}
           {%- endif -%}
 
+          {%- assign author_name = author.first | append: " " | append: author.last -%}
 
-
-          <!-- add equal author -->
-          {%- assign author_is_eq = false -%}
-          {%- assign author_name = author.first | append: " " | append: author.last | strip -%}
-          {%- if entry.eqauthors -%}
-            {%- assign eqauthors = entry.eqauthors | split: ',' -%}
+          <!-- {%- if eqauthors -%}
             {%- for eqauthor in eqauthors -%}
-              {%- assign eqauthor_cp = eqauthor | strip -%}
-              {% if eqauthor_cp == author_name %}
+              {%- if eqauthors == author_name -%}
                 {%- assign author_is_eq = true -%}
-              {% endif %}
+              {%- endif -%}
             {%- endfor -%}
-          {%- endif -%}
-          {%- if author_is_eq -%}
-            {%- assign add_str = "*" -%}
-          {%- else -%}
-            {%- assign add_str = "" -%}
-          {%- endif -%}
-          <!-- add equal author end -->
+          {%- endif -%} -->
+          
 
-          <!-- B {{add_str}} E -->
 
           {%- if forloop.length > 1 -%}
             {%- if forloop.first == false -%},&nbsp;{%- endif -%}
             {%- if forloop.last and author_array_limit == author_array_size -%}and&nbsp;{%- endif -%}
           {%- endif -%}
 
+
           {%- if author_is_self -%}
             <!-- <em>{{author.first}} {{author.last}}</em> -->
             <!-- <strong><font color=blue>{{author.first}} {{author.last}}</font></strong> -->
-            <strong>{{author.first}} {{author.last}}{{add_str}}</strong>
-          {%- else -%}
-            {%- if coauthor_url -%}
-              <a href="{{coauthor_url}}">{{author.first}} {{author.last}}</a>{{add_str}}
+            <!-- {%- if entry.eqnumber and star_amount < eqnumber -%} -->
+            <!-- {%- if author_is_eq == true -%} -->
+            {%- if entry.eqnumber and star_amount < eqnumber -%}
+              <strong>{{author.first}} {{author.last}}*</strong>
+              {%- assign star_amount = star_amount | plus: 1 -%}
             {%- else -%}
-              {{author.first}} {{author.last}}{{add_str}}
+              <strong>{{author.first}} {{author.last}}</strong>
+            {%- endif -%}
+          {%- else -%}
+            {%- if entry.eqnumber and star_amount < eqnumber -%}
+              {%- if coauthor_url -%}
+                <a href="{{coauthor_url}}">{{author.first}} {{author.last}}</a>*
+              {%- else -%}
+                {{author.first}} {{author.last}}*
+              {%- endif -%}
+              {%- assign star_amount = star_amount | plus: 1 -%}
+            {%- else -%}
+              {%- if coauthor_url -%}
+                <a href="{{coauthor_url}}">{{author.first}} {{author.last}}</a>
+              {%- else -%}
+                {{author.first}} {{author.last}}
+              {%- endif -%}
             {%- endif -%}
           {%- endif -%}
         {%- endfor -%}
