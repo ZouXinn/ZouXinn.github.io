@@ -58,9 +58,10 @@
   contents:
     - title: Conference Reviewer
       items:
-      - ICML (2023-2024)
+      - ICML (2023-2025)
       - NeurIPS (2023-2024)
       - ICLR (2024-2025)
+      - AISTATS (2025)
       - AAAI (2025)
       - IJCAI (2024)
 
@@ -71,10 +72,13 @@
 - title: Honors and Awards
   type: time_table
   contents:
+    - year: 2024
+      items:
+        - National Scholarship (For Ph.D. students)
     - year: 2023
       items:
         - "&quot;Huawei&quot; Scholarship"
-    - year: 2023
+    - year: 2023 - 2024
       items:
         - Outstanding Student Scholarship, Wuhan University
     - year: 2018 - 2020
@@ -82,7 +86,7 @@
         - Outstanding Student Scholarship, Wuhan University
     - year: 2018
       items: 
-        - National Scholarship
+        - National Scholarship (For Undergraduate students)
 
 - title: Academic Interests
   type: nested_list
@@ -99,6 +103,7 @@
       items:
         - Adversarial Learning.
         - Out-of-distribution Generalization.
+        - Out-of-distribution Detection.
 
 - title: Other Interests
   type: list
