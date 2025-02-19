@@ -59,7 +59,7 @@
     - title: Conference Reviewer
       items:
       - ICML (2023-2025)
-      - NeurIPS (2023-2024)
+      - NeurIPS (2023-2025)
       - ICLR (2024-2025)
       - AISTATS (2025)
       - AAAI (2025)
@@ -67,7 +67,10 @@
 
     - title: Journal Reviewer
       items:
+      - IEEE Transactions on Neural Networks and Learning Systems (TNNLS)
+      - Transactions on Machine Learning Research (TMLR)
       - Neurocomputing
+      
 
 - title: Honors and Awards
   type: time_table
