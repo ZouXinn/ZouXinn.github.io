@@ -4,6 +4,18 @@
 @string{aps = {American Physical Society,}}
 
 
+@inproceedings{ICML/MaZouLiu25,
+  abbr={NeurIPS},
+  author={Xinsong Ma and Xin Zou and Weiwei Liu},
+  title={A Online Statistical Framework for Out-of-Distribution Detection},
+  booktitle={ICML},
+  year={2025},
+  abstract={Out-of-distribution (OOD) detection task is significant in reliable and safety-critical applications. Existing approaches primarily focus on developing the powerful score function, but overlook the design of decision-making rules based on these score function. In contrast to prior studies, we rethink the OOD detection task from an perspective of online multiple hypothesis testing. We then propose a novel generalized LOND (g-LOND) algorithm to solve the above problem. Theoretically, the g-LOND algorithm controls false discovery rate (FDR) at pre-specified level without the consideration for the dependence between the p-values. Furthermore, we prove that the false positive rate (FPR) of the g-LOND algorithm converges to zero in probability based on the generalized Gaussian-like distribution family. Finally, the extensive experimental results verify the effectiveness of g-LOND algorithm for OOD detection.},
+  selected={false},
+  html={https://openreview.net/forum?id=BnPaSXSmz1},
+  pdf={https://openreview.net/pdf?id=BnPaSXSmz1},
+}
+
 @inproceedings{DBLP:conf/nips/ZouX2024,
   abbr={NeurIPS},
   author       = {Xin Zou and
@@ -31,7 +43,7 @@
   url = {https://www.sciencedirect.com/science/article/pii/S0031320324007593},
   author = {Xiyuan Li and Xin Zou and Weiwei Liu},
   abstract = {Residual Networks (ResNet) are pivotal in machine learning. The connection between ResNets and ordinary differential equations (ODEs) has inspired enhancements of ResNets using sophisticated numerical methods for ODE systems. Recent advancements in numerical self-adaptive schemes, which adjust time step sizes based on the feature maps or parameters of residual blocks, have demonstrated promising results in enhancing ResNet performance, surpassing those achieved with fixed time step methods. However, these self-adaptive time step constructions lack theoretical support and can limit performance improvements since the self-adaptive time steps should theoretically depend on both the feature maps and the parameters of the residual blocks. In this study, we conduct a rigorous theoretical analysis of the residual functions associated with fixed or self-adaptive time step methods to demonstrate the advantages and rational designs of the self-adaptive approach. Subsequently, we introduce a novel self-adaptive ResNet, AdaTS-ResNet, which effectively incorporates both feature maps and parameters in its time step adjustments. Experimental results on the ImageNet and CIFAR datasets reveal that AdaTS-ResNet surpasses TSCLSTM-ResNet (Yang et al., 2020) in prediction accuracy and computational efficiency, where TSCLSTM represents the latest advancements of the methods designed based on the self-adaptive scheme of ODE. Our findings highlight the potential of improving ResNet architectures through adaptive techniques of dynamical systems, offering insights for future enhancements in deep learning models.},
-  selected={true},
+  selected={false},  % Not selected for the list of papers
   html={https://www.sciencedirect.com/science/article/pii/S0031320324007593},
   pdf={https://www.sciencedirect.com/science/article/pii/S0031320324007593/pdfft?md5=8051d1b2504a167e2f5a02ab9ac1bf2c&pid=1-s2.0-S0031320324007593-main.pdf},
 }
@@ -44,7 +56,7 @@
   year={2024},
   abstract={
     Out-of-distribution (OOD) detection task plays the key role in reliable and safety-critical applications. Existing researches mainly devote to designing or training the powerful score function but overlook investigating the decision rule based on the proposed score function. Different from previous work, this paper aims to design a decision rule with rigorous theoretical guarantee and well empirical performance. Specifically, we provide a new insight for the OOD detection task from a hypothesis testing perspective and propose a novel generalized Benjamini Hochberg (g-BH) procedure to solve the testing problem. Theoretically, the g-BH procedure controls false discovery rate (FDR) at pre-specified level. Furthermore, we derive an upper bound of the expectation of false positive rate (FPR) for the g-BH procedure based on the tailed generalized Gaussian distribution family, indicating that the FPR of g-BH procedure converges to zero in probability. Finally, the extensive experimental results verify the superiority of g-BH procedure over the traditional threshold-based decision rule on several OOD detection benchmarks. Particularly, combining SHE with the g-BH procedure, the FPR95 is reduced by 13.65% on average compared with the vanilla SHE.},
-    selected={true},
+    selected={false},  % Not selected for the list of papers
   html={https://openreview.net/forum?id=SPygKwms0X&referrer=%5Bthe%20profile%20of%20Weiwei%20Liu%5D(%2Fprofile%3Fid%3D~Weiwei_Liu1)},
   pdf={https://openreview.net/pdf?id=SPygKwms0X},
 }
@@ -118,5 +130,5 @@
   abstract={Although deep neural networks (DNN) have achieved great success, their applications in safety-critical areas are hindered due to their vulnerability to adversarial attacks. Some recent works have accordingly proposed to enhance the robustness of DNN from a dynamic system perspective. Following this line of inquiry, and inspired by the asymptotic stability of the general nonautonomous dynamical system, we propose to make each clean instance be the asymptotically stable equilibrium points of a slowly time-varying system in order to defend against adversarial attacks. We present a theoretical guarantee that if a clean instance is an asymptotically stable equilibrium point and the adversarial instance is in the neighborhood of this point, the asymptotic stability will reduce the adversarial noise to bring the adversarial instance close to the clean instance. Motivated by our theoretical results, we go on to propose a nonautonomous neural ordinary differential equation (ASODE) and place constraints on its corresponding linear time-variant system to make all clean instances act as its asymptotically stable equilibrium points. Our analysis suggests that the constraints can be converted to regularizers in implementation. The experimental results show that ASODE improves robustness against adversarial attacks and outperforms state-of-the-art methods.},
   pdf={https://proceedings.neurips.cc/paper_files/paper/2022/file/299a08ee712d4752c890938da99a77c6-Paper-Conference.pdf},
   html={https://proceedings.neurips.cc/paper_files/paper/2022/hash/299a08ee712d4752c890938da99a77c6-Abstract-Conference.html},
-  selected={true},
+  selected={false},
 }
