@@ -29,7 +29,7 @@
         <!-- Entry bib key -->
         <div id="{{entry.key}}" class="col-sm-8">
         <!-- Title -->
-        <div class="title">{{entry.title}}</div> {%- if  %} <span style="font-weight: bold; color: red;">{{entry.highlight}}</span>
+        <div class="title">{{entry.title}}</div> {%- if  %} <b>{{entry.highlight}}</b>
         <!-- Author -->
         <div class="author">
         {% assign author_array_size = entry.author_array | size %}
