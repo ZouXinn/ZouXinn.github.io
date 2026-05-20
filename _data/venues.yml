@@ -14,6 +14,10 @@
   url: https://icml.cc/
   color: "#f25313"
 
+"ICLR":
+  url: https://iclr.cc/
+  color: "#f25313"
+
 "PR":
   url: https://www.sciencedirect.com/journal/pattern-recognition/
   color: "#00bfff"
