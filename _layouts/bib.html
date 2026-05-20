@@ -219,8 +219,7 @@
               {% endif %}
               ></span>
             {%- endif %}
-            {%- assign dimensions_disabled = entry.dimensions == 'false' or entry.dimensions == false -%}
-            {%- if site.badges.dimensions_badge and dimensions_disabled != true %}
+            {%- if site.badges.dimensions_badge and entry.dimensions != 'false' and entry.dimensions != false %}
               <span class="__dimensions_badge_embed__"
               {% if entry.doi %}
                 data-doi="{{ entry.doi }}"
