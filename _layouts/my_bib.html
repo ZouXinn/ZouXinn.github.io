@@ -87,33 +87,7 @@
           {%- endif -%}
 
 
-          {%- if author_is_self -%}
-            <!-- <em>{{author.first}} {{author.last}}</em> -->
-            <!-- <strong><font color=blue>{{author.first}} {{author.last}}</font></strong> -->
-            <!-- {%- if entry.eqnumber and star_amount < eqnumber -%} -->
-            <!-- {%- if author_is_eq == true -%} -->
-            {%- if entry.eqnumber and star_amount < eqnumber -%}
-              <strong>{{author.first}} {{author.last}}*</strong>
-              {%- assign star_amount = star_amount | plus: 1 -%}
-            {%- else -%}
-              <strong>{{author.first}} {{author.last}}</strong>
-            {%- endif -%}
-          {%- else -%}
-            {%- if entry.eqnumber and star_amount < eqnumber -%}
-              {%- if coauthor_url -%}
-                <a href="{{coauthor_url}}">{{author.first}} {{author.last}}</a>*
-              {%- else -%}
-                {{author.first}} {{author.last}}*
-              {%- endif -%}
-              {%- assign star_amount = star_amount | plus: 1 -%}
-            {%- else -%}
-              {%- if coauthor_url -%}
-                <a href="{{coauthor_url}}">{{author.first}} {{author.last}}</a>
-              {%- else -%}
-                {{author.first}} {{author.last}}
-              {%- endif -%}
-            {%- endif -%}
-          {%- endif -%}
+          {%- if author_is_self -%}{%- if entry.eqnumber and star_amount < eqnumber -%}<strong>{{author.first}} {{author.last}}*</strong>{%- assign star_amount = star_amount | plus: 1 -%}{%- else -%}<strong>{{author.first}} {{author.last}}</strong>{%- endif -%}{%- else -%}{%- if entry.eqnumber and star_amount < eqnumber -%}{%- if coauthor_url -%}<a href="{{coauthor_url}}">{{author.first}} {{author.last}}</a>*{%- else -%}{{author.first}} {{author.last}}*{%- endif -%}{%- assign star_amount = star_amount | plus: 1 -%}{%- else -%}{%- if coauthor_url -%}<a href="{{coauthor_url}}">{{author.first}} {{author.last}}</a>{%- else -%}{{author.first}} {{author.last}}{%- endif -%}{%- endif -%}{%- endif -%}
         {%- endfor -%}
         
         {%- assign more_authors = author_array_size | minus: author_array_limit -%}
