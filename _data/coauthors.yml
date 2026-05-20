@@ -1,6 +1,8 @@
 "Li":
   - firstname: ["Xiyuan"]
     url: https://openreview.net/profile?id=~Xiyuan_Li3
+  - firstname: ["Boqi"]
+    url: https://scholar.google.com/citations?user=rYtY_mwAAAAJ&hl=zh-CN
 
 "Liu":
   - firstname: ["Weiwei"]
@@ -22,6 +24,14 @@
     url: https://scholar.google.com/citations?user=Cv1FsuAAAAAJ&hl=zh-CN
 
 
+"Gong":
+  - firstname: ["Xiuwen"]
+    url: https://scholar.google.com/citations?user=zVt8s84AAAAJ&hl=zh-CN
+
+
+"Wu":
+  - firstname: ["Jie"]
+    url: https://scholar.google.com/citations?user=9s4Rk_YAAAAJ&hl=zh-CN
 
 
 "Adams":
