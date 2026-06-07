@@ -2,7 +2,7 @@
 layout: about
 title: About
 permalink: /
-subtitle: I am Xin Zou (邹鑫), a fourth-year PhD student at the School of Computer Science, <a href='https://en.whu.edu.cn/'>Wuhan University</a>.
+subtitle: I am Xin Zou (邹鑫), a final-year PhD student at the School of Computer Science, <a href='https://en.whu.edu.cn/'>Wuhan University</a>.
 
 profile:
   align: right
@@ -21,7 +21,7 @@ social: true  # includes social icons at the bottom of the page
 
 **Research Interests:** Statistical Learning Theory; Deep Learning Theory; Representation Learning; Trustworthy Machine Learning.
 
-**Education:** I am a fourth-year PhD student at the School of Computer Science, Wuhan University. Before that, I obtained my Bachelor’s degree in School of Computer Science from Wuhan University.
+**Education:** I am a final-year PhD student at the School of Computer Science, Wuhan University. Before that, I obtained my Bachelor’s degree in School of Computer Science from Wuhan University.
 
 **News:**
 - I was supported by the Fundamental Research Project for Young Professional from NSFC (国家自然科学基金博士生专项).
