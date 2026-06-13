@@ -198,22 +198,23 @@ $ cd <your-repo-name>
 
 ---
 
-#### Local setup using Docker (Recommended on Windows)
+#### Local setup using Docker (Recommended on Windows and macOS)
 
 You need to take the following steps to get `al-folio` up and running in your local machine:
 
-- First, install [docker](https://docs.docker.com/get-docker/) and [docker-compose](https://docs.docker.com/compose/install/).
+- First, install [Docker Desktop](https://docs.docker.com/desktop/setup/install/mac-install/) on macOS, or [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) on other systems.
 - Finally, run the following command that will pull a pre-built image from DockerHub and will run your website.
 
 ```bash
-$ docker-compose up
+$ docker compose up
 ```
 
 Note that when you run it for the first time, it will download a docker image of size 300MB or so.
 
-Now, feel free to customize the theme however you like (don't forget to change the name!). After you are done, you can use the same command (`docker-compose up`) to render the webpage with all you changes. Also, make sure to commit your final changes.
+Now, feel free to customize the theme however you like (don't forget to change the name!). After you are done, you can use the same command (`docker compose up`) to render the webpage with all you changes. Also, make sure to commit your final changes.
 
 > To change port number, you can edit `docker-compose.yml` file.
+> If your system still uses the legacy Compose binary, replace `docker compose` with `docker-compose`.
 
 <details><summary>(click to expand) <strong>Build your own docker image:</strong></summary>
 
@@ -222,7 +223,7 @@ Now, feel free to customize the theme however you like (don't forget to change t
 Build and run a new docker image using:
 
 ```bash
-$ docker-compose -f docker-local.yml up
+$ docker compose -f docker-local.yml up
 ```
 
 > If you want to update jekyll, install new ruby packages, etc., all you have to do is build the image again using `--force-recreate` argument at the end of previous command! It will download ruby and jekyll and install all ruby packages again from scratch.
