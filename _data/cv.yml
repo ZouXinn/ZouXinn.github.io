@@ -53,6 +53,16 @@
 #       institution: University of Zurich, Zurich, Switzerland
 #       year: 1909 - 1911
 
+- title: Projects and Grants
+  type: time_table
+  contents:
+    - year: 2025.01-2026.12
+      items:
+        - Fundamental Research Project for Young Professional from NSFC (Principal Investigator)
+    - year: 2025.01-2026.06
+      items:
+        - Youth Talents Support Project - Doctoral Student Special Program
+
 - title: Professional Services
   type: nested_list
   contents:
@@ -78,6 +88,9 @@
   contents:
     - year: 2025
       items:
+        - Tianyuan Dic Scholarship
+    - year: 2025
+      items:
         - Lei Jun Breakthrough Scholarship
     - year: 2024
       items:
@@ -85,7 +98,7 @@
     - year: 2023
       items:
         - "&quot;Huawei&quot; Scholarship"
-    - year: 2023 - 2024
+    - year: 2023 - 2025
       items:
         - Outstanding Student Scholarship, Wuhan University
     - year: 2018 - 2020
@@ -95,12 +108,15 @@
       items: 
         - National Scholarship (For Undergraduate students)
 
+
 - title: Academic Interests
   type: nested_list
   contents:
     - title: Statistical Learning Theory.
       items: 
         - PAC Learning.
+        - Boosting.
+        - Generalization Bounds.
     - title: Generalization Theory.
       items:
         - Uniform Convergence.
