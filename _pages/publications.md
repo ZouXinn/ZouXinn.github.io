@@ -8,6 +8,11 @@ nav: true
 nav_order: 1
 ---
 <!-- _pages/publications.md -->
+
+{% include bib_search.liquid %}
+
+<p>* means equal contribution.</p>
+
 <div class="publications">
 
 {%- for y in page.years %}

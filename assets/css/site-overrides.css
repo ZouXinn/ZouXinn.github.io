@@ -1,0 +1,38 @@
+:root {
+  --site-control-radius: 0.45rem;
+  --site-badge-radius: 0.25rem;
+}
+
+.card,
+.dropdown-menu,
+.popover,
+.af-popover,
+.course-item,
+.rounded {
+  border-radius: var(--site-control-radius) !important;
+}
+
+.badge,
+abbr.badge,
+.btn,
+.page-link,
+.af-page-link,
+.form-control,
+.custom-select,
+input,
+textarea,
+select,
+.af-table-search,
+.af-table-pagination button,
+.newsletter-form-input,
+.bibsearch-form-input,
+.newsletter-form-button,
+.newsletter-loading-button,
+.code-display-wrapper .copy,
+.af-tooltip {
+  border-radius: var(--site-badge-radius) !important;
+}
+
+.calendar-toggle-btn {
+  border-radius: var(--site-control-radius) !important;
+}

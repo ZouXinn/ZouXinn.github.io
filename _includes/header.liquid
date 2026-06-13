@@ -1,0 +1,83 @@
+<header>
+  <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation">
+    <div class="container" style="display: flex; flex-wrap: nowrap; align-items: center; gap: 0.75rem; overflow-x: auto">
+      <a class="navbar-brand title font-weight-lighter" href="{{ '/' | relative_url }}">
+        <span class="font-weight-bold">{{ site.first_name }}</span>
+        {{ site.last_name }}
+      </a>
+
+      <div
+        class="navbar-collapse-main"
+        id="navbarNav"
+        style="display: flex !important; visibility: visible !important; flex: 1 1 auto; min-width: 0; overflow-x: auto"
+      >
+        <ul
+          class="navbar-nav navbar-menu-list flex-nowrap"
+          style="display: flex; flex-direction: row; align-items: center; flex-wrap: nowrap; gap: 0.25rem; margin: 0 0 0 auto"
+        >
+          <li class="nav-item {% if page.url == '/' %}active{% endif %}">
+            <a class="nav-link" href="{{ '/' | relative_url }}">
+              About
+              {% if page.url == '/' %}
+                <span class="sr-only">(current)</span>
+              {% endif %}
+            </a>
+          </li>
+
+          <li class="nav-item {% if page.url contains '/publications/' %}active{% endif %}">
+            <a class="nav-link" href="{{ '/publications/' | relative_url }}">
+              Publications
+              {% if page.url contains '/publications/' %}
+                <span class="sr-only">(current)</span>
+              {% endif %}
+            </a>
+          </li>
+
+          <li class="nav-item {% if page.url contains '/cv/' %}active{% endif %}">
+            <a class="nav-link" href="{{ '/cv/' | relative_url }}">
+              CV
+              {% if page.url contains '/cv/' %}
+                <span class="sr-only">(current)</span>
+              {% endif %}
+            </a>
+          </li>
+
+          <li class="nav-item {% if page.url contains '/blog/' %}active{% endif %}">
+            <a class="nav-link" href="{{ '/blog/' | relative_url }}">
+              Blog
+              {% if page.url contains '/blog/' %}
+                <span class="sr-only">(current)</span>
+              {% endif %}
+            </a>
+          </li>
+
+          {% if site.search_enabled %}
+            <li class="nav-item">
+              <button id="search-toggle" type="button" title="Search" aria-label="Open search">
+                <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span>
+              </button>
+            </li>
+          {% endif %}
+
+          {% if site.enable_darkmode %}
+            <li class="toggle-container">
+              <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme">
+                <i class="fa-half-sun-moon" id="light-toggle-system"></i>
+                <i class="fa-solid fa-moon" id="light-toggle-dark"></i>
+                <i class="fa-solid fa-sun" id="light-toggle-light"></i>
+              </button>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  {% if site.enable_progressbar %}
+    <progress id="progress" value="0">
+      <div class="progress-container">
+        <span class="progress-bar"></span>
+      </div>
+    </progress>
+  {% endif %}
+</header>

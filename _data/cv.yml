@@ -1,134 +1,101 @@
-- title: General Information
-  type: map
-  contents:
-    - name: Full Name
-      value: Xin Zou
-    - name: Languages
-      value: English, Chinese
-
-- title: Education
-  type: time_table
-  contents:
-    - title: Ph.D. in Computer Science
-      institution: School of Computer Science, Wuhan University
-      year: 2021-Present
-      description:
-        - Advised by Weiwei Liu
-    - title: Bachelor in Software Engineering
-      institution: School of Computer Science, Wuhan University
-      year: 2017-2021
-      description:
-        - GPA 3.897/4.0.
-
-# - title: Experience
-#   type: time_table
-#   contents:
-#     - title: Professor of Theoretical Physics
-#       institution: Institute for Advanced Study, Princeton University
-#       year: 1933 - 1955
-#       description:
-#         - Description 1.
-#         - Description 2.
-#         - title: Description 3.
-#           contents:
-#             - Sub-description 1.
-#             - Sub-description 2.
-#     - title: Visiting Professor
-#       institution: California Institute of Technology, Pasadena, California, US
-#       year: 1933
-#       description:
-#         - Description 1.
-#         - Description 2.
-
-#     - title: Director
-#       institution: Kaiser Wilhelm Institute for Physics, Berlin, Germany.
-#       year: 1917-1933
-
-#     - title: Professor of Theoretical Physics
-#       institution: Karl-Ferdinand University, Prague, Czechoslovakia
-#       year: 1911 - 1917
-#       description:
-
-#     - title: Associate Professor of Theoretical Physics
-#       institution: University of Zurich, Zurich, Switzerland
-#       year: 1909 - 1911
-
-- title: Projects and Grants
-  type: time_table
-  contents:
-    - year: 2025.01-2026.12
-      items:
-        - Fundamental Research Project for Young Professional from NSFC (Principal Investigator)
-    - year: 2025.01-2026.06
-      items:
-        - Youth Talents Support Project - Doctoral Student Special Program
-
-- title: Professional Services
-  type: nested_list
-  contents:
-    - title: Conference Reviewer
-      items:
-      - ICML (2023-2026)
-      - NeurIPS (2023-2025)
-      - ICLR (2024-2026)
-      - AISTATS (2025-2026)
-      - AAAI (2025-2026)
-      - IJCAI (2024)
-
-    - title: Journal Reviewer
-      items:
-      - IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI)
-      - IEEE Transactions on Neural Networks and Learning Systems (TNNLS)
-      - Transactions on Machine Learning Research (TMLR)
-      - Neurocomputing
-      
-
-- title: Honors and Awards
-  type: time_table
-  contents:
-    - year: 2025
-      items:
-        - Tianyuan Dic Scholarship
-    - year: 2025
-      items:
-        - Lei Jun Breakthrough Scholarship
-    - year: 2024
-      items:
-        - National Scholarship (For Ph.D. students)
-    - year: 2023
-      items:
-        - "&quot;Huawei&quot; Scholarship"
-    - year: 2023 - 2025
-      items:
-        - Outstanding Student Scholarship, Wuhan University
-    - year: 2018 - 2020
-      items:
-        - Outstanding Student Scholarship, Wuhan University
-    - year: 2018
-      items: 
-        - National Scholarship (For Undergraduate students)
+cv:
+  name: Xin Zou
+  label: Ph.D. student in Computer Science
+  email: zouxin2021@gmail.com
+  location: Wuhan, China
+  image: ""
 
 
-- title: Academic Interests
-  type: nested_list
-  contents:
-    - title: Statistical Learning Theory.
-      items: 
-        - PAC Learning.
-        - Boosting.
-        - Generalization Bounds.
-    - title: Generalization Theory.
-      items:
-        - Uniform Convergence.
-        - Stability.
-        - Feature Learning.
-    - title: Trustworthy Machine Learning.
-      items:
-        - Adversarial Learning.
-        - Out-of-distribution Generalization.
-        - Out-of-distribution Detection.
+  social_networks:
+    - network: GitHub
+      username: ZouXinn
+    - network: X
+      username: zouxin2023
 
-- title: Other Interests
-  type: list
-  contents:
-    - <u>Hobbies:</u> badminton, table tennis, etc.
+  sections:
+    Education:
+      - institution: School of Computer Science, Wuhan University
+        area: Computer Science and Technology
+        studyType: Ph.D. Student
+        location: Wuhan, China
+        start_date: 2021
+        end_date: Present
+        highlights:
+          - "Advisor: Prof. Weiwei Liu."
+          - "Research focus: statistical learning theory, deep learning theory, representation learning, and trustworthy machine learning."
+
+      - institution: School of Computer Science, Wuhan University
+        area: Software Engineering
+        studyType: Bachelor Student
+        location: Wuhan, China
+        start_date: 2017
+        end_date: 2021
+        highlights:
+          - GPA 3.897/4.0.
+
+    Research Interests:
+      - items:
+          - label: Statistical Learning Theory
+            items:
+              - PAC learning
+              - Boosting
+              - Generalization bounds
+          - label: Generalization Theory
+            items:
+              - Uniform convergence
+              - Stability
+              - Feature learning
+          - label: Trustworthy Machine Learning
+            items:
+              - Adversarial learning
+              - Out-of-distribution generalization
+              - Out-of-distribution detection
+
+    Projects and Grants:
+      - title: Fundamental Research Project for Young Professional from NSFC (Principal Investigator)
+        date: 2025.01 - 2026.12
+      - title: Youth Talents Support Project - Doctoral Student Special Program
+        date: 2025.01 - 2026.06
+
+    Honors and Awards:
+      - title: Tianyuan Dic Scholarship
+        date: 2025
+      - title: Lei Jun Breakthrough Scholarship
+        date: 2025
+      - title: National Scholarship (For Ph.D. students)
+        date: 2024
+      - title: Huawei Scholarship
+        date: 2023
+      - title: Outstanding Student Scholarship, Wuhan University
+        date: 2023 - 2025
+      - title: Outstanding Student Scholarship, Wuhan University
+        date: 2018 - 2020
+      - title: National Scholarship (For Undergraduate students)
+        date: 2018
+
+    Academic Services:
+      - items:
+          - label: Conference Reviewing
+            items:
+              - ICML 2023-2026
+              - NeurIPS 2023-2025
+              - ICLR 2024-2026
+              - AISTATS 2025-2026
+              - AAAI 2025-2026
+              - IJCAI 2024
+          - label: Journal Reviewing
+            items:
+              - IEEE Transactions on Pattern Analysis and Machine Intelligence (TPAMI)
+              - IEEE Transactions on Neural Networks and Learning Systems (TNNLS)
+              - Transactions on Machine Learning Research (TMLR)
+              - Neurocomputing
+
+    CV Files:
+      - items:
+          - "[English CV](/assets/pdf/CV.pdf)"
+          - "[Chinese CV](/assets/pdf/CV-Chinese.pdf)"
+
+    Other Interests:
+      - items:
+          - Badminton
+          - Table tennis
