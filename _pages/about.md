@@ -17,7 +17,7 @@ selected_papers: true # includes a list of papers marked as "selected={true}"
 social: true  # includes social icons at the bottom of the page
 
 announcements:
-  enabled: false
+  enabled: true
 
 latest_posts:
   enabled: false
@@ -26,12 +26,6 @@ latest_posts:
 **Research Interests:** Statistical Learning Theory; Deep Learning Theory; Representation Learning; Trustworthy Machine Learning.
 
 **Education:** I am a final-year PhD student at the School of Computer Science, Wuhan University. Before that, I obtained my Bachelor’s degree in School of Computer Science from Wuhan University.
-
-**News:**
-- I was supported by the Fundamental Research Project for Young Professional from NSFC (国家自然科学基金博士生专项).
-- I was supported by the Youth Talents Support Project - Doctoral Student Special Program (首届中国科协青年人才托举工程-博士生专项).
-
-For publications, * means equal contribution.
 
 <!-- Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com). You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
 

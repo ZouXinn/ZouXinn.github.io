@@ -1,11 +1,4 @@
 cv:
-  name: Xin Zou
-  label: Ph.D. student in Computer Science
-  email: zouxin2021@gmail.com
-  location: Wuhan, China
-  image: ""
-
-
   social_networks:
     - network: GitHub
       username: ZouXinn
@@ -19,7 +12,7 @@ cv:
         studyType: Ph.D. Student
         location: Wuhan, China
         start_date: 2021
-        end_date: Present
+        end_date: 2026
         highlights:
           - "Advisor: Prof. Weiwei Liu."
           - "Research focus: statistical learning theory, deep learning theory, representation learning, and trustworthy machine learning."
