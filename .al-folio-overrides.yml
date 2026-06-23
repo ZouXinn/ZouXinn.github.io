@@ -1,0 +1,52 @@
+---
+version: 1
+overrides:
+  _includes/cv/awards.liquid:
+    owner: al_folio_cv
+    gem_version: 1.0.0
+    upstream_path: templates/cv/awards.liquid
+    upstream_sha256: 9a8171c8499d79cfd8f10122fa5b20fb7c26ab51afcc3b44f4823e8dfa824af9
+    local_sha256: f73bc1d0928013faf96bb3036ee8ec4fd9312247fb12c98f1d2ed94681e3af89
+    acknowledged_at: '2026-06-13'
+  _includes/cv/render.liquid:
+    owner: al_folio_cv
+    gem_version: 1.0.0
+    upstream_path: templates/cv/render.liquid
+    upstream_sha256: 89c9ce23250ace91325d69ae0b8fab67ecc31466de1f09f91958c745e98a2324
+    local_sha256: edfb042e153db055deadcc4bf94a7c10428f08f0ca442944ce9c7bd4c07567b9
+    acknowledged_at: '2026-06-13'
+  _includes/header.liquid:
+    owner: al_folio_core
+    gem_version: 1.0.11
+    upstream_path: _includes/header.liquid
+    upstream_sha256: c8663513baded68d9fa5fbe4d6363a976535bbe201efe5138243d0ff03101058
+    local_sha256: b48877be7f8ccc12cd489401e5dd6d687005160c6a2f8f58be45bfc5a7ae6e16
+    acknowledged_at: '2026-06-13'
+  _layouts/about.liquid:
+    owner: al_folio_core
+    gem_version: 1.0.11
+    upstream_path: _layouts/about.liquid
+    upstream_sha256: 2c28eb83b71fe65f252202c11f0b4a19a9b6f1faccdc870b4f91c4ea51d0c6f1
+    local_sha256: b17d3887317c223ca099a45073d095757d0898adfc4df19255d0ac18408cdf15
+    acknowledged_at: '2026-06-23'
+  _layouts/bib.liquid:
+    owner: al_folio_core
+    gem_version: 1.0.11
+    upstream_path: _layouts/bib.liquid
+    upstream_sha256: 430311d9b94adf6fb1c2fab7609f6e726efc98e2b50e7b1c4cde0ad654c04506
+    local_sha256: 2e2cff57d5f332a76b4bd3923801dfcb31cca2d004dcefa73441123ab004e554
+    acknowledged_at: '2026-06-13'
+  _layouts/cv.liquid:
+    owner: al_folio_core
+    gem_version: 1.0.11
+    upstream_path: _layouts/cv.liquid
+    upstream_sha256: c586e8051e785b492a0f4452c4e06798d47a8c363d29487e48de4fcd9851700e
+    local_sha256: a0ded7727b7d577fbb731b39df2c080b1ec9eab7493e726d7836128f8964a0f0
+    acknowledged_at: '2026-06-13'
+  _layouts/default.liquid:
+    owner: al_folio_core
+    gem_version: 1.0.11
+    upstream_path: _layouts/default.liquid
+    upstream_sha256: 4b713c35f7383692b99f4f1086123acbc3cb247e775a4cebe39985b5302fb9b2
+    local_sha256: 154118099d9fe88e0681cfb67b4148766bfa02b7a01d31145156ad35380457e8
+    acknowledged_at: '2026-06-13'
