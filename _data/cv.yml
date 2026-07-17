@@ -15,7 +15,7 @@ cv:
         end_date: 2026
         highlights:
           - "Advisor: Prof. Weiwei Liu."
-          - "Research focus: statistical learning theory, deep learning theory, representation learning, and trustworthy machine learning."
+          - "Research focus: statistical learning theory, deep learning theory, representation learning, trustworthy machine learning, and large language models."
 
       - institution: School of Computer Science, Wuhan University
         area: Software Engineering
@@ -43,6 +43,11 @@ cv:
               - Adversarial learning
               - Out-of-distribution generalization
               - Out-of-distribution detection
+          - label: Large Language Models
+            items:
+              - Pretraining (Architecture)
+              - Optimization
+              - Scaling
 
     Projects and Grants:
       - title: Fundamental Research Project for Young Professional from NSFC (Principal Investigator)
