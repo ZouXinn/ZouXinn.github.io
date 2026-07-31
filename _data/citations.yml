@@ -1,12 +1,12 @@
 metadata:
-  last_updated: '2026-07-15'
+  last_updated: '2026-07-31'
 papers:
   CGtG970AAAAJ:2osOgNQ5qMEC:
-    citations: 13
+    citations: 14
     title: Coverage-Guaranteed Prediction Sets for Out-of-Distribution Data
     year: '2024'
   CGtG970AAAAJ:9yKSN-GCB0IC:
-    citations: 21
+    citations: 22
     title: On the adversarial robustness of out-of-distribution generalization models
     year: '2023'
   CGtG970AAAAJ:IjCSPb-OGe4C:
@@ -22,7 +22,7 @@ papers:
     title: On Learnability and Disambiguation of Multiclass Partial Concept Classes
     year: Unknown Year
   CGtG970AAAAJ:Y0pCki6q_DkC:
-    citations: 2
+    citations: 3
     title: A Unified Decision Rule for Generalized Out-of-Distribution Detection
     year: '2025'
   CGtG970AAAAJ:YsMSGLbcyi4C:
@@ -34,13 +34,17 @@ papers:
     title: Generalization Bounds for Adversarial Contrastive Learning
     year: '2023'
   CGtG970AAAAJ:qjMakFHDy7sC:
-    citations: 11
+    citations: 12
     title: A Provable Decision Rule for Out-of-Distribution Detection
     year: '2024'
   CGtG970AAAAJ:u5HHmVD_uO8C:
     citations: 33
     title: Defending Against Adversarial Attacks via Neural Dynamic System
     year: '2022'
+  CGtG970AAAAJ:ufrVoPGSRksC:
+    citations: 0
+    title: Generalization Bounds for Out-of-distribution Generalization
+    year: Unknown Year
   CGtG970AAAAJ:zYLM7Y9cAGgC:
     citations: 1
     title: An Online Statistical Framework for Out-of-Distribution Detection
