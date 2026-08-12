@@ -1,0 +1,207 @@
+<!DOCTYPE html> <html lang="en"> <head> <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> <meta charset="utf-8"> <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"> <meta http-equiv="X-UA-Compatible" content="IE=edge"> <title> DeepSeekV4技术报告阅读笔记 | Xin Zou </title> <meta name="author" content="Xin Zou"> <meta name="description" content="DeepSeekV4技术报告阅读笔记"> <meta name="keywords" content="jekyll, jekyll-theme, academic-website, portfolio-website"> <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline' https:; img-src 'self' data: https:; font-src 'self' data: https:; media-src 'self' https:; frame-src 'self' https:; connect-src 'self' https:;"> <style>
+  :root {
+    --max-content-width: 800px;
+  }
+</style> <link rel="stylesheet" href="/assets/css/tailwind.css?v=50c64c15cbb9fd1ce6056fdb8bcb4b62"> <link rel="stylesheet" href="/assets/css/bootstrap-compat.css?v=aa8aa1241f76708eaa8c8fad88fe7955"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css" integrity="sha256-MVopmdyC2tYTiJ8wlktf0uh0v4NgT+vNdyVFepi7Q0c=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/academicons@1.9.5/css/academicons.min.css" integrity="sha256-SzrCOBJbGVFMahewkgjwnApaV2+av1DwMAA+/QGLyZw=" crossorigin="anonymous"> <link defer rel="stylesheet" href="https://cdn.jsdelivr.net/npm/scholar-icons@1.0.3/css/scholar-icons.css" integrity="sha256-VY3hHVj/hNX3fYG6wtbA6TcKJQl7+FthzGSyIB64klY=" crossorigin="anonymous"> <link defer rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons&amp;display=swap"> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-github.css?v=591dab5a4e56573bf4ef7fd332894c99" media="" id="highlight_theme_light"> <link rel="shortcut icon" href="data:image/svg+xml,&lt;svg%20xmlns=%22http://www.w3.org/2000/svg%22%20viewBox=%220%200%20100%20100%22&gt;&lt;text%20y=%22.9em%22%20font-size=%2290%22&gt;%E2%9A%9B%EF%B8%8F&lt;/text&gt;&lt;/svg&gt;"> <link rel="stylesheet" href="/assets/css/main.css?v=f0b101217084a90093badfe99ff9a7d1"> <link rel="canonical" href="https://zouxinn.github.io/blog/2026/DeepSeekV4-Technique-Report/"> <script src="/assets/js/theme.js?v=7af685e2ba20b37fef545c97b8064050"></script> <link defer rel="stylesheet" href="/assets/css/jekyll-pygments-themes-native.css?v=5847e5ed4a4568527aa6cfab446049ca" media="none" id="highlight_theme_dark"> <script>
+    initTheme();
+  </script> <link rel="stylesheet" href="/assets/css/site-overrides.css?v=65a989943ad6e5be3e46bdde6e3fb3e2"> </head> <body class="fixed-top-nav "> <header> <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top" role="navigation"> <div class="container" style="display: flex; flex-wrap: nowrap; align-items: center; gap: 0.75rem; overflow-x: auto"> <a class="navbar-brand title font-weight-lighter" href="/"> <span class="font-weight-bold">Xin</span> Zou </a> <div class="navbar-collapse-main" id="navbarNav" style="display: flex !important; visibility: visible !important; flex: 1 1 auto; min-width: 0; overflow-x: auto"> <ul class="navbar-nav navbar-menu-list flex-nowrap" style="display: flex; flex-direction: row; align-items: center; flex-wrap: nowrap; gap: 0.25rem; margin: 0 0 0 auto"> <li class="nav-item "> <a class="nav-link" href="/"> About </a> </li> <li class="nav-item "> <a class="nav-link" href="/publications/"> Publications </a> </li> <li class="nav-item "> <a class="nav-link" href="/cv/"> CV </a> </li> <li class="nav-item active"> <a class="nav-link" href="/blog/"> Blog <span class="sr-only">(current)</span> </a> </li> <li class="nav-item"> <button id="search-toggle" type="button" title="Search" aria-label="Open search"> <span class="nav-link">ctrl k <i class="fa-solid fa-magnifying-glass"></i></span> </button> </li> <li class="toggle-container"> <button id="light-toggle" type="button" title="Change theme" aria-label="Change color theme"> <i class="fa-half-sun-moon" id="light-toggle-system"></i> <i class="fa-solid fa-moon" id="light-toggle-dark"></i> <i class="fa-solid fa-sun" id="light-toggle-light"></i> </button> </li> </ul> </div> </div> </nav> <progress id="progress" value="0"> <div class="progress-container"> <span class="progress-bar"></span> </div> </progress> </header> <div class="container mt-5" role="main"> <div class="post"> <header class="post-header"> <h1 class="post-title">DeepSeekV4技术报告阅读笔记</h1> <p class="post-meta"> Created on August 12, 2026 </p> <p class="post-tags"> <a href="/blog/2026"> <i class="fa-solid fa-calendar fa-sm"></i> 2026 </a>   ·   <a href="/blog/tag/llm"> <i class="fa-solid fa-hashtag fa-sm"></i> LLM</a>   <a href="/blog/tag/architecture"> <i class="fa-solid fa-hashtag fa-sm"></i> Architecture</a>   ·   <a href="/blog/category/notes"> <i class="fa-solid fa-tag fa-sm"></i> notes</a> </p> </header> <article class="post-content"> <div id="markdown-content"> <h2 id="1-总览"><strong>1. 总览</strong></h2> <p>DeepSeek-V4 共有 2 个大小的模型，均为 MoE 语言模型。分别为 DeepSeek-V4-Flash 和 DeepSeek-V4-Pro。两模型的具体参数如下表：</p> <table> <thead> <tr> <th style="text-align: center"> </th> <th style="text-align: center">DeepSeek-V4-Flash</th> <th style="text-align: center">DeepSeek-V4-Pro</th> </tr> </thead> <tbody> <tr> <td style="text-align: center">总参数量</td> <td style="text-align: center">284B</td> <td style="text-align: center">1.6T</td> </tr> <tr> <td style="text-align: center">激活参数量</td> <td style="text-align: center">13B</td> <td style="text-align: center">49B</td> </tr> <tr> <td style="text-align: center">上下文长度</td> <td style="text-align: center">1M</td> <td style="text-align: center">1M</td> </tr> </tbody> </table> <p>DeepSeek-V4 在<strong>模型架构</strong>方面的主要技术路线为：</p> <ul> <li>混合 Attention 架构：包含 <strong>Compressed Sparse Attention (CSA)</strong> 和 <strong>Heavily Compressed Attention (HCA)</strong>，这两种架构帮助提升了在长上下文情形下的推理效率。</li> <li> <strong>Manifold Constrained Hyper-Connections (mHC)</strong>：通过扩展表征的维度尝试提升模型的表达能力。</li> <li> <strong>Muon 优化器</strong>：能更快地收敛并提高训练稳定性。</li> </ul> <p>预训练阶段：（还没细看）</p> <p>后训练阶段：（还没细看）</p> <p>相比于 DeepSeek-V3.2，V4 在长上下文场景下的效率显著提升。在 1M token 的长上下文 setting 下，与 V3.2 相比，V4 的 single-token inference FLOPs 只有 V3.2 的 27%，KV cache 只有 V3.2 的 10%。论文开源代码网址为 <a href="https://huggingface.co/collections/deepseek-ai/deepseek-v4" rel="external nofollow noopener" target="_blank">https://huggingface.co/collections/deepseek-ai/deepseek-v4</a>。</p> <h2 id="2-模型架构部分"><strong>2. 模型架构部分</strong></h2> <h3 id="21-与-deepseek-v3-的异同">2.1 与 DeepSeek-V3 的异同</h3> <ul> <li>使用 MoE 架构，采用 DeepSeekMoE 范式</li> <li>MoE 负载均衡部分，仍然采用 V3 的思路：auxiliary-loss-free strategy 加上一个针对极端情形的惩罚项 loss。但是 V4 相比 V3 移去了对 routing target nodes 的限制，重新设计了并行策略来保持训练效率。</li> <li>V3 前几层使用 dense Transformer，V4 将其中的 dense FFN layer 换成带有 Hash routing 的 MoE layer。</li> <li>V4 使用与 V3 相同的 <strong>multi-token prediction</strong> 策略。</li> </ul> <h4 id="211-multi-token-prediction">2.1.1 Multi-token Prediction</h4> <p>原本是 DeepSeek-V3 技术报告中的内容，有空我在这里介绍一下。</p> <h3 id="22-mhc">2.2 mHC</h3> <p>mHC 是 Hyper-Connections (HC) 的改进版本，介绍 mHC 之前，先介绍一下 HC。</p> <p>HC 希望通过扩展残差数据流的宽度来增加网络的拓扑复杂度，认为这样可以提升模型的表达能力，从而提升性能。比如我们在第 $l$ 层原本有一个残差函数 $\mathcal{F}_l: \mathbb{R}^d \to \mathbb{R}^d$，假设我们第 $l$ 层的输入为 $x_l \in \mathbb{R}^d$，那么我们一般的残差网络的做法是：</p> \[x_{l+1} = x_l + \mathcal{F}_l(x_l).\] <p>HC 的做法则是尝试将 $\mathbb{R}^d$ 中的特征扩展到 $\mathbb{R}^{n_\mathrm{hc} \times d}$，从而我们第 $l$ 层的特征变成 $X_l = [\mathbf{x}_ {l,1}, \mathbf{x}_ {l,2}, \dots, \mathbf{x}_ {l,n_ \mathrm{hc}}]^T \in \mathbb{R}^{n_ \mathrm{hc} \times d}$。由于 $\mathcal{F}_ l$ 是从 $\mathbb{R}^d$ 到 $\mathbb{R}^d$ 的映射，数据在进入 $\mathcal{F}_ l$ 前需被处理为 $\mathbb{R}^d$ 空间中的数据，在从 $\mathcal{F}_ l$ 中出来后需被处理为 $\mathbb{R}^{n_ \mathrm{hc} \times d}$ 维的数据，于是 HC 中引入 input mapping $A_ l \in \mathbb{R}^{1 \times n_ \mathrm{hc}}$ 与 output mapping $C_ l \in \mathbb{R}^{n_ \mathrm{hc} \times 1}$ 分别在特征进入残差函数之前和之后进行处理。此外，HC还引入了一个 residual transformation $B_ l \in \mathbb{R}^{n_ \mathrm{hc} \times n_ \mathrm{hc}}$ 来对 indentity map 的输出进行变换。HC 的公式为：</p> \[X_ {l+1} = B_ l X_ l + C_ l \mathcal{F}_ l\left(A_ l X_ l\right). \tag{1}\] <p>其中，$A_ l X_ l = (A_ {l,1} , A_ {l,2}, \dots, A_ {l, n_ \mathrm{hc}}) \cdot (\mathbf{x}_ {l,1}, \mathbf{x}_ {l,2}, \dots, \mathbf{x}_ {l,n_ \mathrm{hc}})^T = \sum_{i=1}^{n_ \mathrm{hc}} A_ {l,i} \mathbf{x}_ {l,i}$ 可以理解为使用 $A_l $ 中的各个元素作为权重，对 $X_ l$ 各行进行加权求和；记 $\mathcal{F}_ l = \mathcal{F}_ l\left(A_ l X_ l\right) \in \mathbb{R}^{1 \times d}$，则 $C_ l \mathcal{F}_ l$ 为 $n_ \mathrm{hc} \times d$ 的矩阵，其中第 $i$ 行为 $C_ {l, i} \mathcal{F}_ l$。</p> <p>原始的残差连接可以保证 identify 信号可以传递到最后一层，即：</p> \[x_ L = x_ {L-1} + \mathcal{F}_ {L-1}(x_ {L-1}) = \cdots = x_ l + \sum_ {i=l}^{L-1} \mathcal{F}_ i(x_ i),\] <p>其中 $L &gt; l$。可以看到，即使传输到第 $L$ 层，第 $l$ 层的信号 $x_l$ 仍然被保持。而 identity mapping 给出的信号 $x_l$ 并没有随着层数的加深而消失，这一点看起来正好符合 resnet 的设计初衷。然而，对于 HC，通过递推可以得到：</p> \[X_ L = \left(\prod_{i=1}^{L-l} B_ {L-i}\right)X_ l + \sum_{i=l}^{L-1}\left(\prod_{j=1}^{L-1-i} B_ {L-j}\right)C_i \mathcal{F}_ i(A_ i X_ i).\] <p>可以看到，第一项为 $\left(\prod_{i=1}^{L-l} B_ {L-i}\right)X_ l$ 而不是 $X_ l$，已经不再是 identity mapping 了，这一点实际上已经有些背离了 residual network 的设计初衷了。</p> <p>未完待续。。。。</p> </div> </article> </div> </div> <footer class="fixed-bottom" role="contentinfo"> <div class="container mt-0"> © Copyright 2026 Xin Zou. Powered by <a href="https://jekyllrb.com/" target="_blank" rel="external nofollow noopener">Jekyll</a> with <a href="https://github.com/alshedivat/al-folio" rel="external nofollow noopener" target="_blank">al-folio</a> theme. Hosted by <a href="https://pages.github.com/" target="_blank" rel="external nofollow noopener">GitHub Pages</a>. Photos from <a href="https://unsplash.com" target="_blank" rel="external nofollow noopener">Unsplash</a>. </div> </footer> <script>
+  window.alFolio = {
+    compatBootstrap: true
+  };
+</script> <script src="/assets/js/nav-toggle.js?v=141bd79a73ebc0f0b6ea58e440ae79fc"></script> <script src="/assets/js/bootstrap-compat.js?v=b5579a3408e7c44d505c6a9755578409"></script> <script defer src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js" integrity="sha256-Nn1q/fx0H7SNLZMQ5Hw5JLaTRZp0yILA/FRexe19VdI=" crossorigin="anonymous"></script> <script defer src="https://cdn.jsdelivr.net/npm/imagesloaded@5.0.0/imagesloaded.pkgd.min.js" integrity="sha256-htrLFfZJ6v5udOG+3kNLINIKh2gvoKqwEhHYfTTMICc=" crossorigin="anonymous"></script> <script defer src="/assets/js/masonry.js?v=e49affc7bd2646f6acdad1dbe02c2359" type="text/javascript"></script> <script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js" integrity="sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI=" crossorigin="anonymous"></script> <script src="/assets/al_math/js/mathjax-setup.js"></script> <script defer src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6" crossorigin="anonymous"></script> <script src="/assets/js/tooltips-setup.js?v=fe487e99db6c43751e6e7bdb2d6a0611"></script> <script src="/assets/js/no_defer.js?v=53b1b1a645525975c963ce8bf8bfefcf"></script> <script defer src="/assets/js/common.js?v=87baac90f765f2f3362dcf6aaf312a8a"></script> <script defer src="/assets/js/copy_code.js?v=c8a01c11a92744d44b093fc3bda915df" type="text/javascript"></script> <script defer src="/assets/js/jupyter_new_tab.js?v=896d254890d9b47f0281f63bfccf0dee"></script> <script async src="https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js"></script> <script async src="https://badge.dimensions.ai/badge.js"></script> <script defer src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js" integrity="sha256-ZgMyDAIYDYGxbcpJcfUnYwNevG/xi9OHKaR/8GK+jWc=" crossorigin="anonymous"></script> <script defer src="/assets/al_img_tools/js/zoom.js"></script> <script defer src="/assets/js/progress-bar.js?v=499464c5c63ced6cf7ad62509f1e2610" type="text/javascript"></script> <script src="https://cdn.jsdelivr.net/npm/vanilla-back-to-top@7.2.1/dist/vanilla-back-to-top.min.js" integrity="sha256-uMJJ3EoTyfRBoTbR+lrfu1uRQ87RZG8AR3cVNuQVeFg=" crossorigin="anonymous"></script> <script>
+    addBackToTop();
+  </script> <script type="module" src="/assets/al_search/js/search/ninja-keys.min.js"></script> <ninja-keys hidebreadcrumbs noautoloadmdicons placeholder="Type to start searching"></ninja-keys> <script src="/assets/al_search/js/search-setup.js"></script> <script>
+// get the ninja-keys element
+const ninja = document.querySelector('ninja-keys');
+
+// add the home and posts menu items
+ninja.data = [{
+    id: "nav-about",
+    title: "About",
+    section: "Navigation",
+    handler: () => {
+      window.location.href = "/";
+    },
+  },{id: "nav-publications",
+          title: "Publications",
+          description: "publications by categories in reversed chronological order. generated by jekyll-scholar.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/publications/";
+          },
+        },{id: "nav-cv",
+          title: "CV",
+          description: "Curriculum vitae.",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/cv/";
+          },
+        },{id: "nav-blog",
+          title: "Blog",
+          description: "",
+          section: "Navigation",
+          handler: () => {
+            window.location.href = "/blog/";
+          },
+        },{id: "post-deepseekv4技术报告阅读笔记",
+        
+          title: "DeepSeekV4技术报告阅读笔记",
+        
+        description: "DeepSeekV4技术报告阅读笔记",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/DeepSeekV4-Technique-Report/";
+          
+        },
+      },{id: "post-a-test-post",
+        
+          title: "a test post",
+        
+        description: "a blog post test",
+        section: "Posts",
+        handler: () => {
+          
+            window.location.href = "/blog/2026/a-test-post/";
+          
+        },
+      },{id: "books-the-godfather",
+          title: 'The Godfather',
+          description: "",
+          section: "Books",handler: () => {
+              window.location.href = "/books/the_godfather/";
+            },},{id: "news-i-was-supported-by-the-fundamental-research-project-for-young-professional-from-nsfc-国家自然科学基金博士生专项",
+          title: 'I was supported by the Fundamental Research Project for Young Professional from NSFC...',
+          description: "",
+          section: "News",},{id: "news-i-was-supported-by-the-youth-talents-support-project-doctoral-student-special-program-首届中国科协青年人才托举工程-博士生专项",
+          title: 'I was supported by the Youth Talents Support Project - Doctoral Student Special...',
+          description: "",
+          section: "News",},{id: "news-i-graduated-from-wuhan-university-and-got-my-phd-degree-congratulations-to-myself",
+          title: 'I graduated from Wuhan University and got my PhD degree. Congratulations to myself!...',
+          description: "",
+          section: "News",},{id: "projects-project-1",
+          title: 'project 1',
+          description: "with background image",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/1_project/";
+            },},{id: "projects-project-2",
+          title: 'project 2',
+          description: "a project with a background image and giscus comments",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/2_project/";
+            },},{id: "projects-project-3-with-very-long-name",
+          title: 'project 3 with very long name',
+          description: "a project that redirects to another website",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/3_project/";
+            },},{id: "projects-project-4",
+          title: 'project 4',
+          description: "another without an image",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/4_project/";
+            },},{id: "projects-project-5",
+          title: 'project 5',
+          description: "a project with a background image",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/5_project/";
+            },},{id: "projects-project-6",
+          title: 'project 6',
+          description: "a project with no image",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/6_project/";
+            },},{id: "projects-project-7",
+          title: 'project 7',
+          description: "with background image",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/7_project/";
+            },},{id: "projects-project-8",
+          title: 'project 8',
+          description: "an other project with a background image and giscus comments",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/8_project/";
+            },},{id: "projects-project-9",
+          title: 'project 9',
+          description: "another project with an image 🎉",
+          section: "Projects",handler: () => {
+              window.location.href = "/projects/9_project/";
+            },},{id: "teachings-data-science-fundamentals",
+          title: 'Data Science Fundamentals',
+          description: "This course covers the foundational aspects of data science, including data collection, cleaning, analysis, and visualization. Students will learn practical skills for working with real-world datasets.",
+          section: "Teachings",handler: () => {
+              window.location.href = "/teachings/data-science-fundamentals/";
+            },},{id: "teachings-introduction-to-machine-learning",
+          title: 'Introduction to Machine Learning',
+          description: "This course provides an introduction to machine learning concepts, algorithms, and applications. Students will learn about supervised and unsupervised learning, model evaluation, and practical implementations.",
+          section: "Teachings",handler: () => {
+              window.location.href = "/teachings/introduction-to-machine-learning/";
+            },},{
+        id: 'social-cv',
+        title: 'CV',
+        section: 'Socials',
+        handler: () => {
+          window.open("/assets/pdf/CV.pdf", "_blank");
+        },
+      },{
+        id: 'social-email',
+        title: 'email',
+        section: 'Socials',
+        handler: () => {
+          window.open("mailto:%7A%6F%75%78%69%6E%32%30%32%31@%67%6D%61%69%6C.%63%6F%6D", "_blank");
+        },
+      },{
+        id: 'social-github',
+        title: 'GitHub',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://github.com/ZouXinn", "_blank");
+        },
+      },{
+        id: 'social-x',
+        title: 'X',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://twitter.com/zouxin2023", "_blank");
+        },
+      },{
+        id: 'social-scholar',
+        title: 'Google Scholar',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://scholar.google.com/citations?user=CGtG970AAAAJ", "_blank");
+        },
+      },{
+        id: 'social-dblp',
+        title: 'DBLP',
+        section: 'Socials',
+        handler: () => {
+          window.open("https://dblp.org/pid/18/6081.html", "_blank");
+        },
+      },{
+      id: 'light-theme',
+      title: 'Change theme to light',
+      description: 'Change the theme of the site to Light',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("light");
+      },
+    },
+    {
+      id: 'dark-theme',
+      title: 'Change theme to dark',
+      description: 'Change the theme of the site to Dark',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("dark");
+      },
+    },
+    {
+      id: 'system-theme',
+      title: 'Use system default theme',
+      description: 'Change the theme of the site to System Default',
+      section: 'Theme',
+      handler: () => {
+        setThemeSetting("system");
+      },
+    },];
+
+</script> <script src="/assets/al_search/js/shortcut-key.js"></script> </body> </html>
