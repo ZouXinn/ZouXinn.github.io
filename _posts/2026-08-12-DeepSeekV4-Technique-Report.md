@@ -45,13 +45,16 @@ DeepSeek-V4 在**模型架构**方面的主要技术路线为：
 #### 2.1.1 Multi-token Prediction
 原本是 DeepSeek-V3 技术报告中的内容，有空我在这里介绍一下。
 
+#### 2.1.2 MoE 负载均衡
+也是 DeepSeek-V3 技术报告中的内容，有空我在这里介绍一下。
+
 ### 2.2 mHC
 mHC 是 Hyper-Connections (HC) 的改进版本，介绍 mHC 之前，先介绍一下 HC。
 
 HC 希望通过扩展残差数据流的宽度来增加网络的拓扑复杂度，认为这样可以提升模型的表达能力，从而提升性能。比如我们在第 $l$ 层原本有一个残差函数 $\mathcal{F}_l: \mathbb{R}^d \to \mathbb{R}^d$，假设我们第 $l$ 层的输入为 $x_l \in \mathbb{R}^d$，那么我们一般的残差网络的做法是：
 
 $$
-x_{l+1} = x_l + \mathcal{F}_l(x_l).
+x_{l+1} = x_l + \mathcal{F}_l(x_l). \tag{1}
 $$
 
 HC 的做法则是尝试将 $\mathbb{R}^d$ 中的特征扩展到 $\mathbb{R}^{n_\mathrm{hc} \times d}$，从而我们第 $l$ 层的特征变成 $X_l = [\mathbf{x}_ {l,1}, \mathbf{x}_ {l,2}, \dots, \mathbf{x}_ {l,n_ \mathrm{hc}}]^T \in \mathbb{R}^{n_ \mathrm{hc} \times d}$。由于 $\mathcal{F}_ l$ 是从 $\mathbb{R}^d$ 到 $\mathbb{R}^d$ 的映射，数据在进入 $\mathcal{F}_ l$ 前需被处理为 $\mathbb{R}^d$ 空间中的数据，在从 $\mathcal{F}_ l$ 中出来后需被处理为 $\mathbb{R}^{n_ \mathrm{hc} \times d}$ 维的数据，于是 HC 中引入 input mapping $A_ l \in \mathbb{R}^{1 \times n_ \mathrm{hc}}$ 与 output mapping $C_ l \in \mathbb{R}^{n_ \mathrm{hc} \times 1}$ 分别在特征进入残差函数之前和之后进行处理。此外，HC还引入了一个 residual transformation $B_ l \in \mathbb{R}^{n_ \mathrm{hc} \times n_ \mathrm{hc}}$ 来对 indentity map 的输出进行变换。HC 的公式为：
@@ -62,7 +65,6 @@ X_ {l+1}
 B_ l X_ l
 +
 C_ l \mathcal{F}_ l\left(A_ l X_ l\right).
-\tag{1}
 $$
 
 其中，$A_ l X_ l = (A_ {l,1} , A_ {l,2}, \dots, A_ {l, n_ \mathrm{hc}}) \cdot (\mathbf{x}_ {l,1}, \mathbf{x}_ {l,2}, \dots, \mathbf{x}_ {l,n_ \mathrm{hc}})^T = \sum_{i=1}^{n_ \mathrm{hc}} A_ {l,i} \mathbf{x}_ {l,i}$ 可以理解为使用 $A_l $ 中的各个元素作为权重，对 $X_ l$ 各行进行加权求和；记 $\mathcal{F}_ l = \mathcal{F}_ l\left(A_ l X_ l\right) \in \mathbb{R}^{1 \times d}$，则 $C_ l \mathcal{F}_ l$ 为 $n_ \mathrm{hc} \times d$ 的矩阵，其中第 $i$ 行为 $C_ {l, i} \mathcal{F}_ l$。
@@ -81,4 +83,118 @@ $$
 
 可以看到，第一项为 $\left(\prod_{i=1}^{L-l} B_ {L-i}\right)X_ l$ 而不是 $X_ l$，已经不再是 identity mapping 了，这一点实际上已经有些背离了 residual network 的设计初衷了。
 
-未完待续。。。。
+在实验中，mHC作者 也发现 HC 的训练并不稳定，比如 mHC 论文中就贴出了这样的实验结果图：
+
+<img src="/assets/img/post_assets/2026-08-12-DeepSeekV4-Technique-Report/mHC-f-3.png"
+     alt="mHC Figure 3"
+     style="width: 100%; max-width: 100%;">
+
+图中的 $\mathcal{H}_ l^\mathrm{res}$ 就对应此处的 $B_ l$，此处为了与 DeepSeekV4 符号保持一致选择使用 DeepSeekV4 的符号。左图画出了各层的 Amax Gain Magnitude，对于 forward 过程，Amax Gain Magnitude 就是 $B_ l$ 的各个行和的绝对值的最大值，即 $\mathrm{AGM}_ \mathrm{forward} (B_ l) = \underset{1 \le i \le n_ \mathrm{hc}}{\max} \vert \sum_ {j=1}^\mathrm{n_ \mathrm{hc}} B_ {l,ij} \vert$；对于 backward 过程，Amax Gain Magnitude 就是 $B_ l$ 的各个列和的绝对值的最大值，即 $\mathrm{AGM}_ \mathrm{forward} (B_ l) = \underset{1 \le j \le n_ \mathrm{hc}}{\max} \vert \sum_ {i=1}^\mathrm{n_ \mathrm{hc}} B_ {l,ij} \vert$。为什么这么定义呢？考虑 $Y = WX$，其中 $X = [\mathbf{x}_ 1^T; \mathbf{x}_ 2^T; \dots; \mathbf{x}_ n^T] \in \mathbb{R}^{n \times d}$, $W = [\mathbf{w}_ 1^T; \mathbf{w}_ 2^T; \dots; \mathbf{w}_ m^T] \in \mathbb{R}^{m \times n}$, $Y = [\mathbf{y}_ 1^T; \mathbf{y}_ 2^T; \dots; \mathbf{y}_ m^T] \in \mathbb{R}^{m \times d}$。
+- 对于 forward pass：若将 $X$ 的每一行理解成一个表征，那么 $Y$ 的第 $i$ 行可以视为 $X$ 的各行的加权和，其中各行的权重由 $W$ 的第 $i$ 行的各元素值确定。即 $\mathbf{y}_ i^T = \sum_ {j=1}^n \mathbf{w}_ {ij} \mathbf{x}_ j^T$。因此，$\vert \sum_ {j=1}^n \mathbf{w}_ {ij}\vert$ 的值一定程度上反映了 $W$ 将 $X$ 各行的信号放大了多少倍得到的 $\mathbf{y}_ i^T$。考虑极端情况，若 $X$ 各行相等，均为 $\mathbf{x}^T$，则 $\Vert \mathbf{y}_ i \Vert = \vert \sum_ {j=1}^n \mathbf{w}_ {ij}\vert \cdot \Vert \mathbf{x} \Vert$，故特征 $\mathbf{y}_ i$ 的 scale 被放大了 $\vert \sum_ {j=1}^n \mathbf{w}_ {ij}\vert$ 倍。于是 $\mathrm{AGM}_ \mathrm{forward} (W)$ 可以一定程度上刻画 $Y$ 中各行特征相对于 $X$ 中各行特征被放大的最大倍数。
+- 对于 backward pass：若 $L$ 为 loss 值，易知 $\frac{dL}{dX} = W^T \cdot \frac{dL}{dY}$。因此 $\mathrm{AGM}_ \mathrm{backward} (W) = \mathrm{AGM}_ \mathrm{forward} (W^T)$ 刻画了 backward 过程中 $W$ 对梯度的放大倍数。
+
+因此，上述图中用 $\mathrm{AGM}(B_ l)$ 刻画 $B_ l$ 对信号（forward 信号与 backward 信号）传播的 scale 的影响。从图(a)中可以看出，只跨一层时 HC 并不会对信号产生放大效应，信号的传播比较平稳；但是由图(b)可知，当层数累积起来之后，HC 会放大 identity map 那条路径上的信号。
+
+基于上述观察，mHC 文章指出，既然 $\left(\prod_{i=1}^{L-l} B_ {L-i}\right)$ 会放大信号，那么我们就对其进行限制，使其无法放大信号，于是选择增加约束 $\left(\prod_{i=1}^{L-l} B_ {L-i}\right) \in \mathcal{M}_ {n_ \mathrm{hc}}$，其中：
+
+$$
+\mathcal{M}_ n := \left\{
+M  \in \mathbb{R}^{n \times n}
+\mid
+M \mathbf{1}_ n = \mathbf{1}_ n,\;
+\mathbf{1}_ n^{\top} M = \mathbf{1}_ n^{\top},\;
+M \geq 0
+\right\} \tag{2}
+$$
+
+为所有 $n \times n$ 的 doubly stochastic matrices（即各行和以及各列和均为1）所组成的空间，也被称为 Birkhoff polytope。$\mathcal{M}_ n$ 有一个很好的性质：对乘法封闭。即如果 $A, B \in \mathcal{M}_ n$，那么有 $AB \in \mathcal{M}_ n$。这也意味着，我们不必限制 $\left(\prod_{i=1}^{L-l} B_ {L-i}\right) \in \mathcal{M}_ {n_ \mathrm{hc}}$，只需对各个 $B_ l$ 限制 $B_ l \in \mathcal{M}_ {n_ \mathrm{hc}}$ 即可。（既然要保证 identity map 的性质，为何不直接令各个 $B_ l = I$？这不是最能直接保证恒等映射的方式吗）
+
+mHC 选择**动态**地参数化 $A_ l, B_ l, C_ l$，这里的“动态”指的是不单纯地直接将他们设置成可学习的参数，而是让它们与输入特征 $X_ l$ 有关（<font color=red>不过我还没理解到为什么要这样做，是否有一些设计哲学在里面？</font>如果有谁知道，欢迎发邮件讨论）。文章的参数化选择如下：给定输入 $X_ l \in \mathbb{R}^{n_ \mathrm{hc} \times d}$，首先将其压缩成向量然后再进行 normalization：$\hat{X}_ l = \mathrm{RMSNorm}(\mathrm{vec}(X_ l)) \in \mathbb{R}^{1 \times n_ \mathrm{hc} d}$。然后使用 HC 类似的方式给出无约束的 raw parameters $\tilde{A}_ l \in \mathbb{R}^{1 \times n_ \mathrm{hc}}, \tilde{B}_ l \in \mathbb{R}^{n_ \mathrm{hc} \times n_ \mathrm{hc}}$，以及 $\tilde{C}_ l \in \mathbb{R}^{n_ \mathrm{hc} \times 1}$：
+
+$$
+\begin{aligned}
+\tilde{A}_ l
+&=
+\alpha_ l^{\mathrm{pre}}
+\cdot
+\left(\hat{X}_ l W_ l^{\mathrm{pre}}\right)
++
+S_ l^{\mathrm{pre}},
+&& \text{(3)}
+\\
+\tilde{B}_ l
+&=
+\alpha_ l^{\mathrm{res}}
+\cdot
+\operatorname{Mat}\left(\hat{X}_ l W_ l^{\mathrm{res}}\right)
++
+S_ l^{\mathrm{res}},
+&& \text{(4)}
+\\
+\tilde{C}_ l
+&=
+\alpha_ l^{\mathrm{post}}
+\cdot
+\left(\hat{X}_ l W_ l^{\mathrm{post}}\right)^{\top}
++
+S_ l^{\mathrm{post}}.
+&& \text{(5)}
+\end{aligned}
+$$
+
+其中 $W_ l^\mathrm{pre}, W_ l^\mathrm{post} \in \mathbb{R}^{n_ \mathrm{hc}d \times n_ \mathrm{hc}}$，以及 $W_ l^\mathrm{res} \in \mathbb{R}^{n_ \mathrm{hc}d \times n_ \mathrm{hc}^2}$ 为可学习参数，他们负责生成 raw parameters 的动态部分；$\operatorname{Mat}(\cdot)$ 算子将一个 $1 \times n_ \mathrm{hc}^2$ 的向量 reshape 成一个 $n_ \mathrm{hc} \times n_ \mathrm{hc}$ 的矩阵；$S_ l^\mathrm{pre} \in \mathbb{R}^{1 \times n_ \mathrm{hc}}, S_ l^\mathrm{post} \in \mathbb{R}^{n_ \mathrm{hc} \times 1}, S_ l^\mathrm{res} \in \mathbb{R}^{n_ \mathrm{hc} \times n_ \mathrm{hc}}$ 为可学习的静态 bias；$\alpha_ l^\mathrm{pre}, \alpha_ l ^\mathrm{res}, \alpha_ l^\mathrm{post} \in \mathbb{R}$ 为可学习的 **gating factors**，初始化为**很小**的值。此处 mHC 的选择与 HC 略有不同，HC 直接用矩阵形式的 $X_ l$ 进行 RMSNorm 并参与参数化，而 mHC 却先将 $X_ l$ 压缩成向量之后再进行后续操作，<font color=red>这是为什么呢？</font>
+
+有了 raw parameters $\tilde{A}_ l, \tilde{B}_ l, \tilde{C}_ l$ 之后，论文再对这些 raw parameters 施加约束（为了保证数值稳定性）得到最终的参数 $A_ l, B_ l, C_ l$。对于 $A_ l, C_ l$，mHC 施加的约束是**非负和有界**，于是采用 sigmoid 函数作用于它们：
+
+$$
+\begin{aligned}
+A_ l
+&=
+\sigma\left(\tilde{A}_ l\right),
+&& \text{(6)}
+\\
+C_ l
+&=
+2\sigma\left(\tilde{C}_ l\right).
+&& \text{(7)}
+\end{aligned}
+$$
+其中 $\sigma(\cdot)$ 是 Sigmoid 函数。这里 mHC 的选择也与 HC 不同，HC 没有加非负和有界的约束，而是直接在 (3)-(5) 式内部的 $X_l W$ 项外面套了一个 tanh 激活函数。对于 $B_ l$，我们要将其约束在 $\mathcal{M}_ {n_ \mathrm{hc}}$ 中。要达成这一点，论文采用 **Sinkhorn-Knopp algorithm**。该算法首先令 $M^{(0)} = \exp(\tilde{B}_ l)$，注意，这里 exp 是逐元素做指数操作，而不是矩阵的指数操作，需要这么做是因为 Sinkhorn-Knopp algorithm 要求初始矩阵是正的。然后执行
+
+$$
+M^{(t)}
+=
+\mathcal{T}_ r\left(
+\mathcal{T}_ c\left(
+M^{(t-1)}
+\right)
+\right),
+\qquad \tag{8}
+$$
+
+其中，$\mathcal{T}_ r$ 是 row normalization 操作，即让各行元素除以它们的和；$\mathcal{T}_ c$ 是 column normalization。Sinkhorn-Knopp 的结果证明了，当 $t \to \infty$，$M^{(t)}$ 趋近于一个 doubly stochastic matrix。论文中选择了 $t_ {\max} = 20$ 步迭代。
+
+mHC 的论文中的实验结果表明，使用 mHC 确实可以提升训练的稳定性，降低 loss 值，如下图所示：
+
+<img src="/assets/img/post_assets/2026-08-12-DeepSeekV4-Technique-Report/mHC-f-5.png"
+     alt="mHC Figure 5"
+     style="width: 100%; max-width: 100%;">
+
+此外，mHC 的实验还表明了 mHC 确实可以让 Amax Gain Magnitude 稳定：
+
+<img src="/assets/img/post_assets/2026-08-12-DeepSeekV4-Technique-Report/mHC-f-7.png"
+     alt="mHC Figure 7"
+     style="width: 100%; max-width: 100%;">
+
+
+### 2.3 Compressed Sparse Attention (CSA)
+CSA 同时采用了 compression attention 和 sparse attention 的技术：它首先将每 $m$ 个 token 的 KV cache 压缩成一个 compressed KV entry，然后使用 DeepSeek Sparse Attention (DSA, 来自 DeepSeekV3.2) 处理挑选出来的 $k$ 个 compressed KV entries。
+
+
+### 2.4 Heavily Compressed Attention (HCA)
+
+HCA 极大地降低了在长上下文情景下的 attention 计算开销，它做了比较极端的压缩，将每 $m'$ 个 token 的 KV cache 压缩成一个 compressed KV entry，其中 $m' \gg m$。DeepSeekV4 同时使用了 CSA 和 HCA，极大地提升了模型的长上下文能力。
+
+### 2.5 其他细节
+
+未完待续。。。。 
