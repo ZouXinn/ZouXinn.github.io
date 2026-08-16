@@ -112,7 +112,7 @@ $$
 mHC 选择**动态**地参数化 $A_ l, B_ l, C_ l$，这里的“动态”指的是不单纯地直接将他们设置成可学习的参数，而是让它们与输入特征 $X_ l$ 有关（<font color=red>不过我还没理解到为什么要这样做，是否有一些设计哲学在里面？</font>如果有谁知道，欢迎发邮件讨论）。文章的参数化选择如下：给定输入 $X_ l \in \mathbb{R}^{n_ \mathrm{hc} \times d}$，首先将其压缩成向量然后再进行 normalization：$\hat{X}_ l = \mathrm{RMSNorm}(\mathrm{vec}(X_ l)) \in \mathbb{R}^{1 \times n_ \mathrm{hc} d}$。然后使用 HC 类似的方式给出无约束的 raw parameters $\tilde{A}_ l \in \mathbb{R}^{1 \times n_ \mathrm{hc}}, \tilde{B}_ l \in \mathbb{R}^{n_ \mathrm{hc} \times n_ \mathrm{hc}}$，以及 $\tilde{C}_ l \in \mathbb{R}^{n_ \mathrm{hc} \times 1}$：
 
 $$
-\begin{aligned}
+\begin{align}
 \tilde{A}_ l
 &=
 \alpha_ l^{\mathrm{pre}}
@@ -120,7 +120,7 @@ $$
 \left(\hat{X}_ l W_ l^{\mathrm{pre}}\right)
 +
 S_ l^{\mathrm{pre}},
-&& \text{(3)}
+&& \tag{3}
 \\
 \tilde{B}_ l
 &=
@@ -129,7 +129,7 @@ S_ l^{\mathrm{pre}},
 \operatorname{Mat}\left(\hat{X}_ l W_ l^{\mathrm{res}}\right)
 +
 S_ l^{\mathrm{res}},
-&& \text{(4)}
+&& \tag{4}
 \\
 \tilde{C}_ l
 &=
@@ -138,8 +138,8 @@ S_ l^{\mathrm{res}},
 \left(\hat{X}_ l W_ l^{\mathrm{post}}\right)^{\top}
 +
 S_ l^{\mathrm{post}}.
-&& \text{(5)}
-\end{aligned}
+&& \tag{5}
+\end{align}
 $$
 
 其中 $W_ l^\mathrm{pre}, W_ l^\mathrm{post} \in \mathbb{R}^{n_ \mathrm{hc}d \times n_ \mathrm{hc}}$，以及 $W_ l^\mathrm{res} \in \mathbb{R}^{n_ \mathrm{hc}d \times n_ \mathrm{hc}^2}$ 为可学习参数，他们负责生成 raw parameters 的动态部分；$\operatorname{Mat}(\cdot)$ 算子将一个 $1 \times n_ \mathrm{hc}^2$ 的向量 reshape 成一个 $n_ \mathrm{hc} \times n_ \mathrm{hc}$ 的矩阵；$S_ l^\mathrm{pre} \in \mathbb{R}^{1 \times n_ \mathrm{hc}}, S_ l^\mathrm{post} \in \mathbb{R}^{n_ \mathrm{hc} \times 1}, S_ l^\mathrm{res} \in \mathbb{R}^{n_ \mathrm{hc} \times n_ \mathrm{hc}}$ 为可学习的静态 bias；$\alpha_ l^\mathrm{pre}, \alpha_ l ^\mathrm{res}, \alpha_ l^\mathrm{post} \in \mathbb{R}$ 为可学习的 **gating factors**，初始化为**很小**的值。此处 mHC 的选择与 HC 略有不同，HC 直接用矩阵形式的 $X_ l$ 进行 RMSNorm 并参与参数化，而 mHC 却先将 $X_ l$ 压缩成向量之后再进行后续操作，<font color=red>这是为什么呢？</font>
@@ -147,18 +147,19 @@ $$
 有了 raw parameters $\tilde{A}_ l, \tilde{B}_ l, \tilde{C}_ l$ 之后，论文再对这些 raw parameters 施加约束（为了保证数值稳定性）得到最终的参数 $A_ l, B_ l, C_ l$。对于 $A_ l, C_ l$，mHC 施加的约束是**非负和有界**，于是采用 sigmoid 函数作用于它们：
 
 $$
-\begin{aligned}
+\begin{align}
 A_ l
 &=
 \sigma\left(\tilde{A}_ l\right),
-&& \text{(6)}
+&& \tag{6}
 \\
 C_ l
 &=
 2\sigma\left(\tilde{C}_ l\right).
-&& \text{(7)}
-\end{aligned}
+&& \tag{7}
+\end{align}
 $$
+
 其中 $\sigma(\cdot)$ 是 Sigmoid 函数。这里 mHC 的选择也与 HC 不同，HC 没有加非负和有界的约束，而是直接在 (3)-(5) 式内部的 $X_l W$ 项外面套了一个 tanh 激活函数。对于 $B_ l$，我们要将其约束在 $\mathcal{M}_ {n_ \mathrm{hc}}$ 中。要达成这一点，论文采用 **Sinkhorn-Knopp algorithm**。该算法首先令 $M^{(0)} = \exp(\tilde{B}_ l)$，注意，这里 exp 是逐元素做指数操作，而不是矩阵的指数操作，需要这么做是因为 Sinkhorn-Knopp algorithm 要求初始矩阵是正的。然后执行
 
 $$
@@ -188,7 +189,68 @@ mHC 的论文中的实验结果表明，使用 mHC 确实可以提升训练的�
 
 
 ### 2.3 Compressed Sparse Attention (CSA)
-CSA 同时采用了 compression attention 和 sparse attention 的技术：它首先将每 $m$ 个 token 的 KV cache 压缩成一个 compressed KV entry，然后使用 DeepSeek Sparse Attention (DSA, 来自 DeepSeekV3.2) 处理挑选出来的 $k$ 个 compressed KV entries。
+CSA 同时采用了 compression attention 和 sparse attention 的技术：它首先将每 $m$ 个 token 的 KV cache 压缩成一个 compressed KV entry，然后使用 DeepSeek Sparse Attention (DSA, 来自 DeepSeekV3.2) 挑选出 $k$ 个 compressed KV entries 进行 attention 操作。CSA 的结构如图所示：
+
+<img src="/assets/img/post_assets/2026-08-12-DeepSeekV4-Technique-Report/DSV4-f-3.png"
+     alt="DSV4 Figure 3"
+     style="width: 100%; max-width: 100%;">
+
+
+#### 2.3.1 KV Entries 压缩过程
+
+令 $H \in \mathbb{R}^{n \times d}$ 为 hidden states 序列，其中 hidden state 维度为 $d$，序列长度为 $n$。CSA 首先通过 $H$ 计算两组 KV entries $C^a, C^b \in \mathbb{R}^{n \times c}$ 以及这两组 KV entries 对应的 compression weights $Z^a, Z^b \in \mathbb{R}^{n \times c}$：
+
+$$
+\begin{align}
+C^{a} &= H \cdot W^{aKV},
+&
+C^{b} &= H \cdot W^{bKV},
+\tag{9}
+\\
+Z^{a} &= H \cdot W^{aZ},
+&
+Z^{b} &= H \cdot W^{bZ}.
+\tag{10}
+\end{align}
+$$
+
+其中 $W^{aKV}, W^{bKV}, W^{aZ}, W^{bZ} \in \mathbb{R}^{d \times c}$ 为可训练参数。 此处，$C^a, C^b$ 为两组 KV entries。后续需要将每 $m$ 个 KV entry 压缩成 1 个 KV entry，因此需要对其进行加权求和，而 $Z^a, Z^b$ 就分别用来获取 $C^a, C^b$ 对应的加权系数。
+
+接下来就是 compress 的步骤，对于 $C^a, C^b$ 中的每 $m$ 个 KV entries（也就是每 $m$ 行），要对它们进行加权求和得到1个 KV entry（就是1行），加权系数由 $Z^a, Z^b$ 以及一组可以学习 bias 系数 $B^a, B^b \in \mathbb{R}^{m \times b}$ 确定，最终得到压缩后的 compressed KV entries $C^\mathrm{Comp} \in \mathbb{R}^{\frac{n}{m} \times c}$。对于 $C^\mathrm{Comp}$ 的第 $i$ 行 $C_ i^\mathrm{Comp} \in \mathbb{R}^c$，它是由第 $a$ 组对应的 $m$ 个 KV entries 和第 $b$ 组对应的 $m$ 个 KV entries 共同（一共有 $2m$ 个参与加权求和）进行加权求和得到。为方便起见，此处令 $i$ 从 0 开始计数，即 $i = 0,1,\dots, \frac{n}{m} - 1$。令 $[A, B]$ 表示将矩阵 $A, B$ 沿着列的维度进行堆叠，令 $[A; B]$ 表示将矩阵 $A, B$ 沿着行的维度进行堆叠。于是 $C_ i^\mathrm{Comp}$ 对应的加权系数矩阵为：
+
+$$
+\left[
+S^{a}_ {mi:m(i+1)-1};
+S^{b}_ {m(i-1):mi-1}
+\right]
+=
+\operatorname{Softmax}_ {\mathrm{row}}
+\left(
+\left[
+Z^{a}_ {mi:m(i+1)-1} + B^{a};
+Z^{b}_ {m(i-1):mi-1} + B^{b}
+\right]
+\right).
+\tag{11}
+$$
+
+其中 $\operatorname{Softmax}_ {\mathrm{row}}$ 表示沿着行的维度进行 softmax 操作，即 $\operatorname{Softmax}_ {\mathrm{row}}(S)$ 会分别对 $S$ 各列进行 softmax，得到的矩阵的各列的列和为 1。然后再对各行进行加权求和得到 $C_ i^\mathrm{Comp}$：
+
+$$
+C^{\mathrm{Comp}}_ i
+=
+\sum_{j=mi}^{m(i+1)-1}
+S^{a}_ j \odot C^{a}_ j
++
+\sum_{j=m(i-1)}^{mi-1}
+S^{b}_ j \odot C^{b}_ j.
+\tag{12}
+$$
+
+其中 $\odot$ 为 Hadamard product，进行逐元素相乘，$S_ j^a, C_ j^a$ 分别为 $S^a, C^a$ 的第 $j$ 行，$S_ j^b, C_ j^b$ 分别为 $S^b, C^b$ 的第 $j$ 行。注意这里，第 $b$ 组的下标 $i-1$ 比第 $a$ 组的下标 $i$ 少一个，因此当 $i=0$ 时，直接令 $Z^{b}_ {m(i-1):mi-1}$ 的各元素为负无穷，令 $C^{b}_ {m(i-1):mi-1}$ 的各元素为 0，即此时 $b$ 组不参与加权求和。需要注意的是，$C_ i^\mathrm{Comp}$ 的计算需要用到的是 $2m$ 个 KV entries，其中 $m$ 个来自 $a$ 组的第 $i$ 组 $m$ entries，另外 $m$ 个来自 $b$ 组的第 $i-1$ 组 $m$ entries，因此实际上它是包含了 $2m$ 个时刻的信息的，并且用于计算 $C_ i^\mathrm{Comp}$ 的 $b$ 组下标与用于计算 $C_ {i-1}^\mathrm{Comp}$ 的 $a$ 组下标是重叠的。所以 CSA 可以将 KV 序列长度压缩至 $\frac{1}{m}$。这里的 KV cache 中各个 entry 的维度为 $c$ 而不再是 $d$，可以选 $c \ll d$ 来实现与 MLA（见 DeepSeekV3）类似的功能，降低 KV cache 占的空间。
+
+#### 2.3.2 使用 Lightning Indexer 做 Sparse Selection 过程
+
 
 
 ### 2.4 Heavily Compressed Attention (HCA)
