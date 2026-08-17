@@ -251,7 +251,34 @@ $$
 
 #### 2.3.2 使用 Lightning Indexer 做 Sparse Selection 过程
 
+在获得 compressed KV entries $C^{\mathrm{Comp}}$ 之后，CSA 应用 DSA 的 **lightning indexer** 选出 top-$k$ 的 compressed KV entries 来拿与当前 query 做 attention。
 
+Lightning indexer 中有 $n_ h^I$ 个 head，各 head 的 latent dimension 是 $c^I$。这 $n_ h^I$ 个 head 共享一个 K cache $K^\mathrm{IComp} \in \mathbb{R}^{\frac{n}{m} \times c^I}$。对于时刻 $t$ 的 query $h_ t$，这里使用与 MLA 类似的 low rank 方式来产生 indexer queries $\{ q_ {t,1}^I, q_ {t,2}^I, \dots,  q_ {t,n_ h^I}^I \}$：
+
+$$
+\begin{align}
+c_ t^{Q}
+&=
+h_ t \cdot W^{DQ},
+\tag{13}
+\\
+\left[
+q_ {t,1}^{I};
+q_ {t,2}^{I};
+\ldots;
+q_ {t,n_ h^{I}}^{I}
+\right]
+=
+q_ t^{I}
+&=
+c_ t^{Q} \cdot W^{IUQ}.
+\tag{14}
+\end{align}
+$$
+
+
+
+要提一下 SWA，这是个重要的细节。
 
 ### 2.4 Heavily Compressed Attention (HCA)
 
