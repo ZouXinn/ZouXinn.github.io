@@ -309,7 +309,7 @@ K_ s^{I\mathrm{Comp}}
 \end{align}
 $$
 
-其中 $\mathbf{w}_ t^I$ 为权重向量，分别为各个 head 赋予对应的权重，它由 $h_ t \cdot W^w$ 得到，所以**权重是由 hidden state $h_ t$ 选择的**；$W^w \in \mathbb{R}^{d \times n_ h^I}$ 为可学习的矩阵。于是我们可以得到 $t$ 时刻前的 compressed KV entries 对应的 score 的集合 $I = \left\{ I_ {t,s} \big| 1 \le s < \lfloor \frac{t}{m} \rfloor \right\}$（怎么感觉这里应该可以等于 $\lfloor \frac{t}{m} \rfloor$ 因为感觉每个 block 内的最后一个时刻的 query 是可以看到当前 block 里面的信息的），然后使用一个 top-$k$ selector 取获得 score 属于 top-$k$ 的 compressed KV entries $C_ t^\mathrm{SprsComp}$ 用来做 core attention：
+其中 $\mathbf{w}_ t^I$ 为权重向量，分别为各个 head 赋予对应的权重，它由 $h_ t \cdot W^w$ 得到，所以 **权重是由 hidden state $h_ t$ 选择的** ；$W^w \in \mathbb{R}^{d \times n_ h^I}$ 为可学习的矩阵。于是我们可以得到 $t$ 时刻前的 compressed KV entries 对应的 score 的集合 $I = \left\\{ I_ {t,s} \vert 1 \le s < \lfloor \frac{t}{m} \rfloor \right\\}$（怎么感觉这里应该可以等于 $\lfloor \frac{t}{m} \rfloor$ 因为感觉每个 block 内的最后一个时刻的 query 是可以看到当前 block 里面的信息的），然后使用一个 top-$k$ selector 取获得 score 属于 top-$k$ 的 compressed KV entries $C_ t^\mathrm{SprsComp}$ 用来做 core attention：
 
 $$
 C_ t^{\mathrm{SprsComp}}
