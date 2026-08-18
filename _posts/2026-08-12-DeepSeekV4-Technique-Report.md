@@ -249,11 +249,11 @@ $$
 
 其中 $\odot$ 为 Hadamard product，进行逐元素相乘，$S_ j^a, C_ j^a$ 分别为 $S^a, C^a$ 的第 $j$ 行，$S_ j^b, C_ j^b$ 分别为 $S^b, C^b$ 的第 $j$ 行。注意这里，第 $b$ 组的下标 $i-1$ 比第 $a$ 组的下标 $i$ 少一个，因此当 $i=0$ 时，直接令 $Z^{b}_ {m(i-1):mi-1}$ 的各元素为负无穷，令 $C^{b}_ {m(i-1):mi-1}$ 的各元素为 0，即此时 $b$ 组不参与加权求和。需要注意的是，$C_ i^\mathrm{Comp}$ 的计算需要用到的是 $2m$ 个 KV entries，其中 $m$ 个来自 $a$ 组的第 $i$ 组 $m$ entries，另外 $m$ 个来自 $b$ 组的第 $i-1$ 组 $m$ entries，因此实际上它是包含了 $2m$ 个时刻的信息的，并且用于计算 $C_ i^\mathrm{Comp}$ 的 $b$ 组下标与用于计算 $C_ {i-1}^\mathrm{Comp}$ 的 $a$ 组下标是重叠的。所以 CSA 可以将 KV 序列长度压缩至 $\frac{1}{m}$。这里的 KV cache 中各个 entry 的维度为 $c$ 而不再是 $d$，可以选 $c \ll d$ 来实现与 MLA（见 DeepSeekV3）类似的功能，降低 KV cache 占的空间。
 
-#### 2.3.2 使用 Lightning Indexer 做 Sparse Selection 过程
+#### 2.3.2 使用 Lightning Indexer (LI) 做 Sparse Selection 过程
 
 在获得 compressed KV entries $C^{\mathrm{Comp}}$ 之后，CSA 应用 DSA 的 **lightning indexer** 选出 top-$k$ 的 compressed KV entries 来拿与当前 query 做 attention。
 
-Lightning indexer 中有 $n_ h^I$ 个 head，各 head 的 latent dimension 是 $c^I$。这 $n_ h^I$ 个 head 共享一个 K cache $K^\mathrm{IComp} \in \mathbb{R}^{\frac{n}{m} \times c^I}$。对于时刻 $t$ 的 query $h_ t$，这里使用与 MLA 类似的 low rank 方式来产生 indexer queries $\{ q_ {t,1}^I, q_ {t,2}^I, \dots,  q_ {t,n_ h^I}^I \}$：
+Lightning indexer 中有 $n_ h^I$ 个 head，各 head 的 latent dimension 是 $c^I$。这 $n_ h^I$ 个 head **共享一个 K cache $K^\mathrm{IComp} \in \mathbb{R}^{\frac{n}{m} \times c^I}$**。对于时刻 $t$ 的 hidden state $h_ t$，这里使用与 MLA 类似的 low rank 方式来产生 indexer queries $\{ q_ {t,1}^I, q_ {t,2}^I, \dots,  q_ {t,n_ h^I}^I \}$：
 
 $$
 \begin{align}
@@ -276,9 +276,59 @@ c_ t^{Q} \cdot W^{IUQ}.
 \end{align}
 $$
 
+其中，$h_ t \in \mathbb{R}^d$ 为 $t$ 时刻的 hidden state；$c_ t^Q \in \mathbb{R}^{d_ c}$ 为 queries 的 compressed hidden vector。此处 $n_ h^I$ 个 head 的 query 被写到了一起：$q_ t^I$。$W^{DQ} \in \mathbb{R}^{d \times d_ c}$ 和 $W^{IUQ} \in \mathbb{R}^{d_ c \times c^I n_ h^I}$ 分别为 down-projection 矩阵和 up-projection 矩阵。
+
+给定 $t$ 时刻各个 LI head 的 query $\left[q_ {t,1}^{I}; q_ {t,2}^{I}; \ldots; q_ {t,n_ h^{I}}^{I} \right]$ 之后，需要计算第 $s$ 个 compressed block 对于这些 queries 的 index score $I_ {t,s} \in \mathbb{R}$，此处由于不能让 $t$ 时刻的 token 看到 $>t$ 时刻的信息，**只在 $s < \lfloor \frac{t}{m} \rfloor$ 对应的 compressed blocks 中做选择**（注意，此处不再和 2.3.1 节一样假设时间从 0 时刻开始，而是假设时间从 1 时刻开始）。$I_ {t,s}$ 的计算方式如下：
+
+$$
+\begin{align}
+\left[
+w_ {t,1}^{I},
+w_ {t,2}^{I},
+\ldots,
+w_ {t,n_ h^{I}}^{I}
+\right]
+=
+\mathbf{w}_ t^{I}
+&=
+h_ t \cdot W^{w},
+\tag{15}
+\\
+I_ {t,s}
+&=
+\sum_{h=1}^{n_ h^{I}}
+w_ {t,h}^{I}
+\cdot
+\operatorname{ReLU}
+\left(
+q_ {t,h}^{I}
+\cdot
+K_ s^{I\mathrm{Comp}}
+\right).
+\tag{16}
+\end{align}
+$$
+
+其中 $\mathbf{w}_ t^I$ 为权重向量，分别为各个 head 赋予对应的权重，它由 $h_ t \cdot W^w$ 得到，所以**权重是由 hidden state $h_ t$ 选择的**；$W^w \in \mathbb{R}^{d \times n_ h^I}$ 为可学习的矩阵。于是我们可以得到 $t$ 时刻前的 compressed KV entries 对应的 score 的集合 $I = \left\{ I_ {t,s} \big| 1 \le s < \lfloor \frac{t}{m} \rfloor \right\}$（怎么感觉这里应该可以等于 $\lfloor \frac{t}{m} \rfloor$ 因为感觉每个 block 内的最后一个时刻的 query 是可以看到当前 block 里面的信息的），然后使用一个 top-$k$ selector 取获得 score 属于 top-$k$ 的 compressed KV entries $C_ t^\mathrm{SprsComp}$ 用来做 core attention：
+
+$$
+C_ t^{\mathrm{SprsComp}}
+=
+\left\{
+C_ s^{\mathrm{Comp}}
+\;\middle|\;
+I_ {t,s}
+\in
+\operatorname{Top}\text{-}k
+\left(I\right)
+\right\}.
+\tag{17}
+$$
+
+注意，这里有一个细节，对于时刻 $t = 1, 2, \dots$ 如果 $pm < t \le (p+1)m$（其中 $p \ge 0$），则由于不能让 $t$ 时刻的 query 看见 $t+1$ 时刻的 key 和 value，会选择将第 $p+1$（从 1 开始计数）个 compressed KV entry 丢掉，不参与 core attention。此时 DSA 模块必定会丢失时刻 $pm+1, \dots, t$ 的 key 和 value 信息，会**损失局部信息**。一般来说接近时刻 $t$ 的局部信息应该会比较重要，因此，为了避免因此来带的局部信息确实，DeepSeekV4 选择除了做 DSA 之外，再加一个窗口大小为 $n_ \mathrm{win}$ 的 sliding window attention (SWA) 来处理 **uncompressed** KV entries，这样就可以捕获时刻 $t$ 附近的局部信息。一般来说，得让 $n_ \mathrm{win} \ge m$ 才行，不然窗口大小可能无法覆盖丢失的局部信息。
 
 
-要提一下 SWA，这是个重要的细节。
+#### 2.3.3 Shared Key-Value Multi-Query Attention (MQA)
 
 ### 2.4 Heavily Compressed Attention (HCA)
 
