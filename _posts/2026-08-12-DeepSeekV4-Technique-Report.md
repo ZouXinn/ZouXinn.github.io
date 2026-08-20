@@ -253,7 +253,7 @@ $$
 
 在获得 compressed KV entries $C^{\mathrm{Comp}}$ 之后，CSA 应用 DSA 的 **lightning indexer** 选出 top-$k$ 的 compressed KV entries 来拿与当前 query 做 attention。
 
-Lightning indexer 中有 $n_ h^I$ 个 head，各 head 的 latent dimension 是 $c^I$。这 $n_ h^I$ 个 head **共享一个 K cache $K^\mathrm{IComp} \in \mathbb{R}^{\frac{n}{m} \times c^I}$**。对于时刻 $t$ 的 hidden state $h_ t$，这里使用与 MLA 类似的 low rank 方式来产生 indexer queries $\{ q_ {t,1}^I, q_ {t,2}^I, \dots,  q_ {t,n_ h^I}^I \}$：
+Lightning indexer 中有 $n_ h^I$ 个 head，各 head 的 latent dimension 是 $c^I$。这 $n_ h^I$ 个 head **共享一个 K cache $K^\mathrm{IComp} \in \mathbb{R}^{\frac{n}{m} \times c^I}$**。对于时刻 $t$ 的 hidden state $h_ t$，这里使用与 MLA 类似的 low rank 方式来产生 indexer queries $\\{ q_ {t,1}^I, q_ {t,2}^I, \dots,  q_ {t,n_ h^I}^I \\}$：
 
 $$
 \begin{align}
@@ -329,6 +329,46 @@ $$
 
 
 #### 2.3.3 Shared Key-Value Multi-Query Attention (MQA)
+
+假设有 $n_ h$ 个 query heads，一般的 multi-head attention 会对应地有 $n_ h$ 个 key heads 和 $n_ h$ 个 value heads。而 MQA 则是让这 $n_ h$ 个 query heads 共用同一个 key head 和 value head，这样做能将 KV cache 减少 $n_ h$ 倍。此处则是**使用 $C_ t^{\mathrm{SprsComp}}$ 中的 KV entries 同时作为 attention key 和 attention value**，相当于只有一个 KV head。具体来说，对于 query token $t$，首先从 compressed latent vector $c_ t^Q$ 中产生 attention queries $\\{ q_ {t,1}, q_ {t,2}, \dots, q_ {t,n_ h}\\}$
+
+$$
+\left[
+q_ {t,1};
+q_ {t,2};
+\ldots;
+q_ {t,n_ h}
+\right]
+=
+q_ t
+=
+c_ t^{Q} \cdot W^{UQ}.
+\tag{18}
+$$
+
+其中 $W^{UQ} \in \mathbb{R}^{d_ c \times c n_ h}$ 是 querie 的 up-projection 矩阵。注意这里与 (14) 式中 indexer queries **使用的是同一个 latent vector $c_ t^{Q}$**（<font color=red>我之前还在想为什么要用 latent vector，反正 query 也没有 cache，也没必要做类似于 MLA 的操作，原来是为了复用 indexer head 的 latent vector</font>），只是它们的 up-projection 矩阵不同。于是可以直接在 $\\{ q_ {t,i} \\}$ 和 $C_ t^{\mathrm{SprsComp}}$ 上使用 MQA 算子：
+
+$$
+o_ {t,i}
+=
+\operatorname{CoreAttn}
+\left(
+\mathrm{query}=q_ {t,i},
+\;
+\mathrm{key}=C_ t^{\mathrm{SprsComp}},
+\;
+\mathrm{value}=C_ t^{\mathrm{SprsComp}}
+\right).
+\tag{19}
+$$
+
+其中 $o_ {t,i} \in \mathbb{R}^c$ 是第 $i$ 个 core attention head 在第 $i$ 个 token 上的输出。
+
+**Grouped Output Projection.** 在 DeepSeekV4 的设定中，$c n_ h$ 是很大的，因此直接对 $[ o_ {t,1}; o_ {t,2}; \dots ; o_ {t,n_ h} ] = o_ t \in \mathbb{R}^{c n_ h} $ 使用线性投影的计算开销很大。为此，论文设计了一种 grouped output projection 策略。首先将 $n_ h$ 个 head 的输出分成 $g$ 组，然后对第 $i$ 组的 output $o_ {t,i}^G \in \mathbb{R}^{c \frac{n_ h}{g}}$，将其投影到 $d_ g$ 维空间中，得到 $o_ {t,i}^{G'} \in \mathbb{R}^{d_ g}$，其中 $d_ g < c  \frac{n_ h}{g}$，否则这个操作就没意义了。最后将 $[o_ {t, 1}^{G'}; \dots, o_ {t, g}^{G'}] \in \mathbb{R}^{d_ g g}$ 拼到一起投影到 $\mathbb{R}^d$ 上得到最终 attention output $\hat{o}_ t \in \mathbb{R}^d$。感觉一句话来说就是将 $\mathbb{R}^{c n_ h}$ 先投影到 $\mathbb{R}^{d_ g g}$，再从 $\mathbb{R}^{d_ g g}$ 投影到 $\mathbb{R}^{d}$。按乘法计算个数来看：
+- 将 $\mathbb{R}^{c n_ h}$ 先投影到 $\mathbb{R}^{d_ g g}$ 相当于做了 $g$ 组 $\mathbb{R}^{c  \frac{n_ h}{g}} \to d_ g$ 的乘法，共 $g \cdot c  \frac{n_ h}{g} \cdot d_ g = c n_ h d_g$ 次乘法；从 $\mathbb{R}^{d_ g g}$ 投影到 $\mathbb{R}^d$ 共有 $d_ g g d$ 次乘法。共 $c n_ h d_g + d_ g g d = d_ g (c n_ h + gd)$ 次乘法。
+- 直接从 $\mathbb{R}^{c n_ h}$ 投影到 $\mathbb{R}^{d}$ 要做 $c n_ h d $ 次乘法。
+- 两者相差 $c n_ h d - d_ g (c n_ h + gd) = c n_ h (d - d_ g) + d_ g g d >  d_ g g (d - d_ g) + d_ g g d = d_ g g (2d - d_ g)$。所以似乎还得让 $2d - d_ g > 0$，即 $d_ g < 2d$ 才能节省乘法个数（除非论文想表达的负担是指显存的负担而不是计算量的负担）。  
+
 
 ### 2.4 Heavily Compressed Attention (HCA)
 
