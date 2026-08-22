@@ -374,6 +374,89 @@ $$
 
 HCA 极大地降低了在长上下文情景下的 attention 计算开销，它做了比较极端的压缩，将每 $m'$ 个 token 的 KV cache 压缩成一个 compressed KV entry，其中 $m' \gg m$。DeepSeekV4 同时使用了 CSA 和 HCA，极大地提升了模型的长上下文能力。
 
+<img src="/assets/img/post_assets/2026-08-12-DeepSeekV4-Technique-Report/DSV4-f-4.png"
+     alt="DSV4 Figure 4"
+     style="width: 100%; max-width: 100%;">
+
+HCA 与 CSA 类似，只不过 CSA 的压缩倍数 $m'$ 更大，即 $m' \gg m$，且 HCA 不使用 sparse attention（需要它来捕获全局信息，因此不能使用 sparse attention，否则可能会丢失全局信息）。
+
+#### 2.4.1 KV Entries 压缩过程
+
+令 $H \in \mathbb{R}^{n \times d}$ 为 input hidden state 序列，HCA 首先将与 CSA 类似地计算原始的 KV entries $C \in \mathbb{R}^{n \times c}$ 和 compression weights $Z \in \mathbb{R}^{n \times c}$：
+
+$$
+\begin{align}
+C &= H \cdot W^{KV}, \tag{20} \\
+Z &= H \cdot W^{Z}. \tag{21}
+\end{align}
+$$
+
+其中 $W^{KV}, W^Z \in \mathbb{R}^{d \times c}$ 是可训练的参数。与 CSA 不同的是，这里没有分 $a$ 组 $b$ 组，而是只有一组。与 CSA 类似，HCA 将 $C$ 中的每 $m'$ 个 KV entries 压缩成一个，压缩的公式为：
+
+$$
+\begin{align}
+S_ {m'i:m'(i+1)-1}
+&=
+\operatorname{Softmax}_ {\mathrm{row}}
+\left(
+Z_ {m'i:m'(i+1)-1} + B
+\right),
+\tag{22}
+\\
+C_ i^{\mathrm{Comp}}
+&=
+\sum_ {j=m'i}^{m'(i+1)-1}
+S_ j \odot C_ j.
+\tag{23}
+\end{align}
+$$
+
+其中 $C^{\mathrm{Comp}} \in \mathbb{R}^{\frac{n}{m'} \times c}$ 是 compressed KV entry 序列，$B \in \mathbb{R}^{m' \times c}$ 为可学习的 bias 参数。
+
+#### 2.4.2 Shared Key-Value Multi-Query Attention (MQA) 与 Grouped Output Projection
+
+与 CSA 类似，HCA 也使用 shared KV MQA 以及 grouped output projection。KA compression 之后，对于给定的 token $t$，HCA 首先也是先得到 attention queries $\\{ q_ {t,1}, q_ {t,2}, \dots, q_ {t,n_ h}\\}$：
+
+$$
+\begin{align}
+c_ t^{Q}
+&=
+h_ t \cdot W^{DQ},
+\tag{24}
+\\
+\left[
+q_ {t,1};
+q_ {t,2};
+\ldots;
+q_ {t,n_ h}
+\right]
+=
+q_ t
+&=
+c_ t^{Q} \cdot W^{UQ}.
+\tag{25}
+\end{align}
+$$
+
+其中 $h_ t \in \mathbb{R}^d$ 为 query token $t$ 的 hidden state；$n_ h$ 为 query head 的数量；$W^{DQ} \in \mathbb{R}^{d \times d_ c}, W^{UQ} \in \mathbb{R}^{d_ c \times c n_ h}$ 分别为 down-projection 和 up-projection 矩阵。然后在 $\\{ q_ {t,i} \\}$ 和 $C^\mathrm{Comp}$ 上使用 MQA：
+
+$$
+o_ {t,i}
+=
+\operatorname{CoreAttn}
+\left(
+\mathrm{query}=q_ {t,i},
+\;
+\mathrm{key}=C^{\mathrm{Comp}},
+\;
+\mathrm{value}=C^{\mathrm{Comp}}
+\right).
+\tag{26}
+$$
+
+之后，与 CSA 类似，HCA 也将 output 划分为 $g$ 组然后进行 grouped output projection，操作与 CSA 一模一样，这里就略过。
+
+
 ### 2.5 其他细节
 
 未完待续。。。。 
