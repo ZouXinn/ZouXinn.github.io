@@ -1,5 +1,5 @@
 metadata:
-  last_updated: '2026-08-07'
+  last_updated: '2026-08-31'
 papers:
   CGtG970AAAAJ:2osOgNQ5qMEC:
     citations: 13
@@ -28,7 +28,11 @@ papers:
   CGtG970AAAAJ:YsMSGLbcyi4C:
     citations: 0
     title: Neural Collapse in Multi-Task Learning
-    year: Unknown Year
+    year: '2026'
+  CGtG970AAAAJ:_FxGoFyzp5QC:
+    citations: 0
+    title: Factorized AdaBoost. MH Achieves the Same Convergence Rate as AdaBoost. MH
+    year: '2026'
   CGtG970AAAAJ:d1gkVwhDpl0C:
     citations: 30
     title: Generalization Bounds for Adversarial Contrastive Learning
